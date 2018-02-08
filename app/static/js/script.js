@@ -32,7 +32,7 @@
 		setSections() {
 			debug.log('Setting menu');
 			document.querySelectorAll('section').forEach(function(section) {
-				viewer.sections.push(new Section(section));
+				new Section(section);
 			});
 		}
 	}
@@ -42,6 +42,7 @@
 		constructor(section) {
 			this.section = section;
 			this.menu = this.addMenu(section);
+			viewer.sections.push(this);
 		}
 
 		// Adds the section into the menu - Called by the constructor
