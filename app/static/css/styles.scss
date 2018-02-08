@@ -9,11 +9,15 @@ $trans: .2s;
     box-sizing: border-box;
 }
 
+.hidden {
+    display: none;
+}
+
 body {
     font-family: Ubuntu, Calibri, Arial, Helvetica, sans-serif;
     background-color: $brown;
     color: $white;
-    margin: 0;
+	margin: 0;
 }
 
 a {
@@ -38,7 +42,7 @@ nav {
         li {
             padding: 1em 2em;
             &.active {
-                background-color: $orange;
+                background-color: $white;
             }
         }
     }
@@ -50,6 +54,4 @@ nav {
     }
 }
 
-.hidden {
-    display: none;
-}
+

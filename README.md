@@ -39,10 +39,20 @@ Used code style is as following:
 #### Used sources
 
 
-[//]: # (### Best practices)
-...
+## Notes & Best practices
+### Classes vs. Objects
+Classes are usefull when you need to create multiple versions of the same object, or you don't want to allow anything else (in the app scope) to call functions or data within that class without being created (within a reachable scope).
+
+Objects are usefull when you want to have a single object to store the data and/or functions. The cannot be recreated. They can be called from other classes and/or objects within the app scope.  
+
+It is usefull to store an array of classes (or classbased-objects) into an object.
 
 
 ## Process
 ### Wednesday 7-2-2018
-Setup the basic structure for the app using ES6 features. Added some basic styles
+Setup the basic structure for the app using ES6 features. Added some basic styles.
+
+
+## Planning/Todo
+- [ ] Create and integrate repo where I can keep basic CSS and JS so I'll build a small library within the minor. Possibly migrate [Vandy.JS](http://js.vandijkstef.nl/vandy.js)
+

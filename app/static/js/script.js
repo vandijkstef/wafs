@@ -37,14 +37,14 @@
 		}
 	}
 
-	// Section class - Contains information about the section and its menu item
+	// Section class - Contains information about the section and creates and stores the menu item
 	class Section {
-		constructor(section, menu) {
+		constructor(section) {
 			this.section = section;
 			this.menu = this.addMenu(section);
 		}
 
-		// Adds the section into the menu - Run by the constructor
+		// Adds the section into the menu - Called by the constructor
 		addMenu(section) {
 			const nav = document.querySelector('nav ul');
 			const hash = section.id;
