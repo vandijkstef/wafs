@@ -1,3 +1,54 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Ubuntu, Calibri, Arial, Helvetica, sans-serif;
+  background-color: #474143;
+  color: #e6e6e6;
+  margin: 0;
+}
+
+a {
+  color: #e6e6e6;
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+a:hover {
+  color: #b3b3b3;
+}
+
+nav {
+  display: flex;
+  justify-content: flex-end;
+  background-color: #ffc636;
+  margin: 0;
+}
+
+nav ul {
+  padding: 0;
+  margin: 0;
+  display: flex;
+  list-style: none;
+}
+
+nav ul li {
+  padding: 1em 2em;
+}
+
+nav ul li.active {
+  background-color: #ff6344;
+}
+
+nav a {
+  color: #474143;
+}
+
+nav a:hover {
+  color: #62595c;
+}
+
 .hidden {
   display: none;
 }

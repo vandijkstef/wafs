@@ -1,11 +1,12 @@
 'use strict';
 
 {
+	// App settings
 	const settings = {
-		debug: true,
-		test: 'test'
+		debug: true
 	};
 
+	// Debug helper - Splits (temporary) console.logs from solid logs
 	const debug = {
 		log: function(data) {
 			if (settings.debug) {
@@ -14,61 +15,86 @@
 		}
 	};
 
+	// App
 	class App {
 		constructor() {
-			this.smth = 9;
 			this.init();
 		}
 
+		// Called by constructor
 		init() {
 			debug.log('Init App');
-			this.setMenu();
+			this.setSections();
 			routes.init();
 		}
 
-		setMenu() {
+		// Fetches the available sections from the DOM
+		setSections() {
 			debug.log('Setting menu');
-			const sections = document.querySelectorAll('section');
-			const nav = document.querySelector('nav ul');
-			sections.forEach(function(section) {
-				const hash = section.id;
-				const name = section.querySelector('h1').innerText;
-				const li = document.createElement('li');
-				const a = document.createElement('a');
-				a.href = '#' + hash;
-				a.innerText = name;
-				li.appendChild(a);
-				nav.appendChild(li);
+			document.querySelectorAll('section').forEach(function(section) {
+				viewer.sections.push(new Section(section));
 			});
 		}
 	}
 
+	// Section class - Contains information about the section and its menu item
+	class Section {
+		constructor(section, menu) {
+			this.section = section;
+			this.menu = this.addMenu(section);
+		}
+
+		// Adds the section into the menu - Run by the constructor
+		addMenu(section) {
+			const nav = document.querySelector('nav ul');
+			const hash = section.id;
+			const name = section.querySelector('h1').innerText;
+			const li = document.createElement('li');
+			const a = document.createElement('a');
+			a.href = '#' + hash;
+			a.innerText = name;
+			li.appendChild(a);
+			nav.appendChild(li);
+			return li;
+		}
+
+		// Hide the section and update the menu item
+		hide() {
+			this.section.classList.add('hidden');
+			this.menu.classList.remove('active');
+		}
+
+		// Show the section and update the menu item
+		show() {
+			this.section.classList.remove('hidden');
+			this.menu.classList.add('active');
+		}
+	}
+
+	// Simply sets up the eventlistener and makes sure the app renders a page
 	const routes = {
 		init() {
 			debug.log('Init routes');
 			window.addEventListener('hashchange', function() {
 				viewer.setTo(window.location.hash);
 			});
-			document.querySelector('nav a').click();
+			viewer.setTo(window.location.hash || 'start');
 		}
 	};
 
+	// Controls the section display on the larger scale
 	const viewer = {
-		active: null,
-		sections: document.querySelectorAll('sections'),
+		sections: [],
 		setTo: function(hash) {
-			console.log(hash);
-			console.log(this.active);
-			if (hash !== this.active) {
-				debug.log('Setting to ' + hash);
-				this.active = hash;
-				this.sections.forEach(function(section) {
-					if (section.id !== hash) {
-						console.log(section);
-						section.classList.add('hidden');
-					}
-				});
-			}
+			hash = hash.replace('#', '');
+			debug.log('Setting to ' + hash);
+			this.sections.forEach(function(section) {
+				if (section.section.id !== hash) {
+					section.hide();
+				} else {
+					section.show();
+				}
+			});
 		}
 	};
 	

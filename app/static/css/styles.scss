@@ -1,0 +1,55 @@
+$brown: rgb(71, 65, 67);
+$yellow: rgb(255, 198, 54);
+$blue: rgb(0, 173, 170);
+$white: rgb(230, 230, 230);
+$orange: rgb(255, 99, 68);
+$trans: .2s;
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Ubuntu, Calibri, Arial, Helvetica, sans-serif;
+    background-color: $brown;
+    color: $white;
+    margin: 0;
+}
+
+a {
+    color: $white;
+    text-decoration: none;
+    transition: $trans;
+    &:hover {
+        color: darken($white, 20);
+    }
+}
+
+nav {
+    display: flex;
+    justify-content: flex-end;
+    background-color: $yellow;
+    margin: 0;
+    ul {
+        padding: 0;
+        margin: 0;
+        display: flex;
+        list-style: none;
+        li {
+            padding: 1em 2em;
+            &.active {
+                background-color: $orange;
+            }
+        }
+    }
+    a {
+        color: $brown;
+        &:hover {
+            color: lighten($brown, 10);
+        }
+    }
+}
+
+.hidden {
+    display: none;
+}
