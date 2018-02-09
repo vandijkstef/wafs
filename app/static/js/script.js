@@ -52,10 +52,12 @@
 			const name = section.querySelector('h1').innerText;
 			const li = document.createElement('li');
 			const a = document.createElement('a');
+
 			a.href = '#' + hash;
 			a.innerText = name;
 			li.appendChild(a);
 			nav.appendChild(li);
+
 			return li;
 		}
 
@@ -89,6 +91,7 @@
 		setTo: function(hash) {
 			hash = hash.replace('#', '');
 			debug.log('Setting to ' + hash);
+
 			this.sections.forEach(function(section) {
 				if (section.section.id !== hash) {
 					section.hide();
@@ -98,7 +101,7 @@
 			});
 		}
 	};
-	
+
 	window.addEventListener('DOMContentLoaded', function() {
 		new App();
 	});
