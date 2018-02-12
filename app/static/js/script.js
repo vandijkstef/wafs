@@ -172,7 +172,6 @@
 
 	window.addEventListener('DOMContentLoaded', function() {
 		new App();
-		console.log('This is an auto update test - 2');
 	});
 
 }
