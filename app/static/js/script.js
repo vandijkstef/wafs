@@ -14,96 +14,114 @@
 			}
 		}
 	};
+
+	// API class
+	class API {
+		constructor(server) {
+			debug.log('API: Created for: ' + server);
+			this.server = server;
+		}
+
+		call(path, callback) {
+			debug.log('API: Calling: "' + path + '" on ' + this.server);
+			const API = new XMLHttpRequest();
+			API.open('GET', this.server + path);
+			API.setRequestHeader('Content-Type', 'application/json');
+			API.onload = function() {
+				if (API.status === 200) {
+					return callback(JSON.parse(API.responseText));
+				} else {
+					console.warn('We didn\'t receive 200 status');
+				}
+			};
+			API.send();
+		}
+	}
 	
 	// App
 	class App {
 		constructor() {
 			this.init();
+			window.addEventListener('popstate', function() {
+				router.go();
+			});
 		}
 		
 		// Called by constructor
 		init() {
-			debug.log('Init App');
-			this.setSections();
-			routes.init();
-		}
-		
-		// Fetches the available sections from the DOM
-		setSections() {
-			debug.log('Setting menu');
-			document.querySelectorAll('section').forEach(function(section) {
-				new Section(section);
+			debug.log('App: Init');
+			router.init();
+			router.add('/', function() {
+				console.log('camtono');
 			});
+			router.add('/test', function() {
+				console.log('chocolate');
+			});
+			console.log(router.routes);
+			router.go();
 		}
+		
 	}
 	
-	// Section class - Contains information about the section and creates and stores the menu item
-	class Section {
-		constructor(section) {
-			this.section = section;
-			this.menu = this.addMenu(section);
-			viewer.sections.push(this);
-		}
-		
-		// Adds the section into the menu - Called by the constructor
-		addMenu(section) {
-			const nav = document.querySelector('nav ul');
-			const hash = section.id;
-			const name = section.querySelector('h1').innerText;
-			const li = document.createElement('li');
-			const a = document.createElement('a');
-			
-			a.href = '#' + hash;
-			a.innerText = name;
-			li.appendChild(a);
-			nav.appendChild(li);
-			
-			return li;
-		}
-		
-		// Hide the section and update the menu item
-		hide() {
-			this.section.classList.add('hidden');
-			this.menu.classList.remove('active');
-		}
-		
-		// Show the section and update the menu item
-		show() {
-			this.section.classList.remove('hidden');
-			this.menu.classList.add('active');
-		}
-	}
-	
-	// Simply sets up the eventlistener and makes sure the app renders a page
-	const routes = {
+	// Router
+	// TODO: Subpages/variable passing...
+	const router = {
+		routes: [],
 		init() {
-			debug.log('Init routes');
-			window.addEventListener('hashchange', function() {
-				viewer.setTo(window.location.hash);
+			debug.log('Router: Init');
+			// Disable functionality of all A elements...
+			document.querySelectorAll('a').forEach(function(a) {
+				a.addEventListener('click', function(e) {
+					try {
+						history.pushState(null, null, e.target.href);
+						router.go();
+						e.preventDefault(); // Must be last line
+					} catch(error) {
+						// ... unless it's an external url
+						debug.log('External URL', error);
+					}
+				});
 			});
-			viewer.setTo(window.location.hash || 'start');
-		}
-	};
-	
-	// Controls the section display on the larger scale
-	const viewer = {
-		sections: [],
-		setTo: function(hash) {
-			hash = hash.replace('#', '');
-			debug.log('Setting to ' + hash);
-			
-			this.sections.forEach(function(section) {
-				if (section.section.id !== hash) {
-					section.hide();
-				} else {
-					section.show();
+		},
+		add: function(route, handler) {
+			debug.log('Router: Add: ' + route);
+			this.routes.push({route: route, handler: handler});
+		},
+		go: function() {
+			let page = window.location.pathname;
+			debug.log('Router: Go: ' + page);
+			let route;
+			this.routes.forEach(function(r) {
+				if (page === r.route) {
+					route = r;
+					return;
 				}
 			});
+			if (route) {
+				route.handler();
+			} else {
+				this.noRoute();
+			}
+		},
+		noRoute: function() {
+			// Render 404 page
+			console.warn(404);
 		}
 	};
+	
+	// TODO: Create a templating thingy?
+	// TODO: Maybe look into the not-simple way to inject HTML
+	// TODO: Rework Vandy.UI tools for this?
 	
 	window.addEventListener('DOMContentLoaded', function() {
 		new App();
+
+		// TODO: Move somewhere-ish? Its working at least...
+		// const gitAPI = new API('https://api.github.com');
+		// gitAPI.call('/orgs/cmda-minor-web/repos', function(data) {
+		// 	const gitDATA = data;
+		// 	console.log(gitDATA);
+		// });
 	});
 
 }

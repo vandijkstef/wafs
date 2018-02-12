@@ -47,6 +47,11 @@ Objects are usefull when you want to have a single object to store the data and/
 
 It is usefull to store an array of classes (or classbased-objects) into an object.
 
+### Single page app with pretty urls
+Single page apps with pretty urls need to use the [history api](https://css-tricks.com/using-the-html5-history-api/).  
+The project will need to run on a server, and that should be [configured](https://gist.github.com/rambabusaravanan/578df6d2486a32c3e7dc50a4201adca4) to serve the main file from any url.  
+By using the "popstate" event, you can catch any history traversion from the browser (using either keyboard or the dedicated buttons). The history.pushstate doesn't fire the popstate event.
+
 
 ## Process
 ### Wednesday 7-2-2018
@@ -54,6 +59,11 @@ Setup the basic structure for the app using ES6 features. Added some basic style
 
 
 ## Planning/Todo
+- [ ] Data ophalen met AJAX (woensdag)
+- [ ] Routie.js of andere router library implementeren (woensdag)
+- [ ] DomChanger.js of andere template engine implementeren (woensdag)
+- [ ] Data manipuleren met map, filter & reduce (vrijdag) 
+- [ ] PWA / Webworker (extra)
 - [ ] Create and integrate repo where I can keep basic CSS and JS so I'll build a small library within the minor. Possibly migrate [Vandy.JS](http://js.vandijkstef.nl/vandy.js)
-- [ ] PWA / Webworker
 - [ ] Onderzoek
+- [ ] Code Review uitvoeren via GitHub (vrijdag)
