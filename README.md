@@ -55,4 +55,5 @@ Setup the basic structure for the app using ES6 features. Added some basic style
 
 ## Planning/Todo
 - [ ] Create and integrate repo where I can keep basic CSS and JS so I'll build a small library within the minor. Possibly migrate [Vandy.JS](http://js.vandijkstef.nl/vandy.js)
-
+- [ ] PWA / Webworker
+- [ ] Onderzoek

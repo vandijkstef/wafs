@@ -105,4 +105,5 @@
 	window.addEventListener('DOMContentLoaded', function() {
 		new App();
 	});
+
 }
