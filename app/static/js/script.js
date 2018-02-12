@@ -17,17 +17,15 @@
 
 	const tools = {
 		// Compares arrays, but is aware of var path parts
+		// Might suit better within the routerv
 		compareRoute: function(route, path) {
 			if (route.length === path.length) {
 				for (let i = 0; i < route.length; i++) {
 					if (route[i] !== path[i]) {
 						if (route[i][0] === ':') {
-							// We are talking variables here							
-							// I can easily fetch the set variable name here, but I can't use it here
-							// Returning smth else then bool is retarded...
-							// What about multivariable urls? (Do we really wanna go that far?)
 							return true;
 						}
+						console.log('I guess I will never this, am I rite?');
 						return false;
 					}
 				}
@@ -74,6 +72,7 @@
 			debug.log('App: Init');
 			router.init();
 
+			// Add all routes
 			router.add('/', function() {
 				const gitAPI = new API('https://api.github.com');
 				gitAPI.call('/orgs/cmda-minor-web/repos', function(data) {
@@ -92,7 +91,7 @@
 				console.log(vars.var);
 			});
 
-			console.log(router.routes);
+			// And try to render the page
 			router.go();
 		}
 		
@@ -108,20 +107,26 @@
 			document.querySelectorAll('a').forEach(function(a) {
 				a.addEventListener('click', function(e) {
 					try {
+						// Try to update the URL, this will fail on external links
 						history.pushState(null, null, e.target.href);
+						// If this didn't fail, we are still here
 						router.go();
 						e.preventDefault(); // Must be last line
 					} catch(error) {
-						// ... unless it's an external url
+						// Probably an external url, dont prevent following the link
 						debug.log('External URL', error);
 					}
 				});
 			});
 		},
+		// Add new route to the router
 		add: function(route, handler) {
 			debug.log('Router: Add: ' + route);
+			// TODO: Add route class
+			// TODO: Test route validity? -> Do we wanna pass in the route as an array? Or make it optional?
 			this.routes.push({route: this.parseLocation(route), handler: handler});
 		},
+		// Go to the current path, the <a> click handler takes care of this
 		go: function() {
 			let route;
 			const vars = {};
@@ -160,6 +165,7 @@
 			});
 			return path;
 		},
+		// 404
 		noRoute: function() {
 			// Render 404 page
 			console.warn(404);

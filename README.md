@@ -3,10 +3,12 @@ The course repo for 'Web App From Scratch'
 Contents:
 * Code style
 * Assignments
+* Notes & Best practices
 * Process
+* TODO
 
 Please note; The app will not function unless run through a server, with additional apache config (see "Single page app with pretty urls" in the notes).
-The live version is available here: http://wafs.minor.vandijkstef.nl/
+The live version is available here: <http://wafs.minor.vandijkstef.nl/>
 
 ## Code Style
 Should you use ESLint, the config file is included.  
@@ -16,6 +18,8 @@ Used code style is as following:
 * TAB Indentation (Size: 4)
 * Single quoted strings
 * Semicolon everywhere
+
+---
 
 ## Assignments
 
@@ -41,6 +45,7 @@ Used code style is as following:
 * The first request will be relatively large.
 #### Used sources
 
+---
 
 ## Notes & Best practices
 ### Classes vs. Objects
@@ -55,19 +60,18 @@ Single page apps with pretty urls need to use the [history api](https://css-tric
 The project will need to run on a server, and that should be [configured](https://gist.github.com/rambabusaravanan/578df6d2486a32c3e7dc50a4201adca4) to serve the main file from any url.  
 By using the "popstate" event, you can catch any history traversion from the browser (using either keyboard or the dedicated buttons). The history.pushstate doesn't fire the popstate event.
 
-
-### 
-
+---
 
 ## Process
 ### Wednesday 7-2-2018
 Setup the basic structure for the app using ES6 features. Added some basic styles.
 
 ### Monday 12-2-2018
-Redone the basic structure for the new API app. Created API Class, fetched some data, created basic router, everything based on pretty urls/history api. Expanded router to accept variables from urls. Note; Solid urls should be defined before var urls. This could be solved by assigning a score to specifity of the url compared to the mathed route and use the most specific route. Out of scope (for now).
+Redone the basic structure for the new API app. Created API Class, fetched some data, created basic router, everything based on pretty urls/history api. Expanded router to accept variables from urls. Note: Solid urls should be defined before var urls. This could be solved by assigning a score to specifity of the url compared to the mathed route and use the most specific route. Out of scope (for now, maybe).
 
 
 ## Planning/Todo
+I like lists
 - [ ] DomChanger.js of andere template engine implementeren (woensdag)
 - [ ] Data manipuleren met map, filter & reduce (vrijdag) 
 - [ ] PWA / Webworker (extra)
