@@ -15,6 +15,26 @@
 		}
 	};
 
+	const tools = {
+		// Compares arrays, but is aware of var path parts
+		compareRoute: function(route, path) {
+			if (route.length === path.length) {
+				for (let i = 0; i < route.length; i++) {
+					if (route[i] !== path[i]) {
+						console.log(route[i][0]);
+						if (route[i][0] === ':') {
+							// We are talking variables here
+							return true;
+						}
+						return false;
+					}
+				}
+				return true;
+			}
+			return false;
+		}
+	};
+
 	// API class
 	class API {
 		constructor(server) {
@@ -51,12 +71,24 @@
 		init() {
 			debug.log('App: Init');
 			router.init();
+
 			router.add('/', function() {
-				console.log('camtono');
+				const gitAPI = new API('https://api.github.com');
+				gitAPI.call('/orgs/cmda-minor-web/repos', function(data) {
+					const gitDATA = data;
+					console.log(gitDATA);
+				});
 			});
 			router.add('/test', function() {
 				console.log('chocolate');
 			});
+			router.add('/test/novar', function() {
+				console.log('no var');
+			});
+			router.add('/test/:var', function() {
+				console.log('testolate');
+			});
+
 			console.log(router.routes);
 			router.go();
 		}
@@ -85,23 +117,38 @@
 		},
 		add: function(route, handler) {
 			debug.log('Router: Add: ' + route);
-			this.routes.push({route: route, handler: handler});
+			this.routes.push({route: this.parseLocation(route), handler: handler});
 		},
 		go: function() {
-			let page = window.location.pathname;
-			debug.log('Router: Go: ' + page);
 			let route;
-			this.routes.forEach(function(r) {
-				if (page === r.route) {
-					route = r;
-					return;
+			let page = this.parseLocation(window.location.pathname);
+			debug.log('Router: Go: ' + page);
+			for (let i = 0; i < this.routes.length; i++) {
+				if (route) {
+					break;
 				}
-			});
+				if (tools.compareRoute(this.routes[i].route, page)) {
+					debug.log('Router: Assigning: ' + this.routes[i].route);
+					route = this.routes[i];
+				}
+			}
 			if (route) {
 				route.handler();
 			} else {
 				this.noRoute();
 			}
+		},
+		// Splits the URL, returns the path as an array
+		parseLocation: function(pathname) {
+			let path = [];
+			pathname = pathname.split('/');
+			// Clear empty elements
+			pathname.forEach(function(p) {
+				if (p.length > 0) {
+					path.push(p);
+				}
+			});
+			return path;
 		},
 		noRoute: function() {
 			// Render 404 page
@@ -109,19 +156,12 @@
 		}
 	};
 	
-	// TODO: Create a templating thingy?
+	// TODO: Create a templating thingy?;
 	// TODO: Maybe look into the not-simple way to inject HTML
 	// TODO: Rework Vandy.UI tools for this?
-	
+
 	window.addEventListener('DOMContentLoaded', function() {
 		new App();
-
-		// TODO: Move somewhere-ish? Its working at least...
-		// const gitAPI = new API('https://api.github.com');
-		// gitAPI.call('/orgs/cmda-minor-web/repos', function(data) {
-		// 	const gitDATA = data;
-		// 	console.log(gitDATA);
-		// });
 	});
 
 }

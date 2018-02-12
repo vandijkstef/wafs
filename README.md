@@ -5,6 +5,9 @@ Contents:
 * Assignments
 * Process
 
+Please note; The app will not function unless run through a server, with additional apache config (see "Single page app with pretty urls" in the notes).
+The live version is available here: http://wafs.minor.vandijkstef.nl/
+
 ## Code Style
 Should you use ESLint, the config file is included.  
 Used code style is as following:
@@ -53,17 +56,22 @@ The project will need to run on a server, and that should be [configured](https:
 By using the "popstate" event, you can catch any history traversion from the browser (using either keyboard or the dedicated buttons). The history.pushstate doesn't fire the popstate event.
 
 
+### 
+
+
 ## Process
 ### Wednesday 7-2-2018
 Setup the basic structure for the app using ES6 features. Added some basic styles.
 
+### Monday 12-2-2018
+Redone the basic structure for the new API app. Created API Class, fetched some data, created basic router, everything based on pretty urls/history api. Expanded router to accept variables from urls. Note; Solid urls should be defined before var urls. This could be solved by assigning a score to specifity of the url compared to the mathed route and use the most specific route. Out of scope (for now).
+
 
 ## Planning/Todo
-- [ ] Data ophalen met AJAX (woensdag)
-- [ ] Routie.js of andere router library implementeren (woensdag)
 - [ ] DomChanger.js of andere template engine implementeren (woensdag)
 - [ ] Data manipuleren met map, filter & reduce (vrijdag) 
 - [ ] PWA / Webworker (extra)
 - [ ] Create and integrate repo where I can keep basic CSS and JS so I'll build a small library within the minor. Possibly migrate [Vandy.JS](http://js.vandijkstef.nl/vandy.js)
 - [ ] Onderzoek
 - [ ] Code Review uitvoeren via GitHub (vrijdag)
+- [ ] Expand router (see notes 12-2)
