@@ -21,9 +21,11 @@
 			if (route.length === path.length) {
 				for (let i = 0; i < route.length; i++) {
 					if (route[i] !== path[i]) {
-						console.log(route[i][0]);
 						if (route[i][0] === ':') {
-							// We are talking variables here
+							// We are talking variables here							
+							// I can easily fetch the set variable name here, but I can't use it here
+							// Returning smth else then bool is retarded...
+							// What about multivariable urls? (Do we really wanna go that far?)
 							return true;
 						}
 						return false;
@@ -85,8 +87,9 @@
 			router.add('/test/novar', function() {
 				console.log('no var');
 			});
-			router.add('/test/:var', function() {
+			router.add('/test/:var', function(vars) {
 				console.log('testolate');
+				console.log(vars.var);
 			});
 
 			console.log(router.routes);
@@ -121,7 +124,8 @@
 		},
 		go: function() {
 			let route;
-			let page = this.parseLocation(window.location.pathname);
+			const vars = {};
+			const page = this.parseLocation(window.location.pathname);
 			debug.log('Router: Go: ' + page);
 			for (let i = 0; i < this.routes.length; i++) {
 				if (route) {
@@ -130,10 +134,16 @@
 				if (tools.compareRoute(this.routes[i].route, page)) {
 					debug.log('Router: Assigning: ' + this.routes[i].route);
 					route = this.routes[i];
+					// Scan the route for variables, add them to the vars object
+					for (let j = 0; j < route.route.length; j++) {
+						if (route.route[j][0] == ':') {
+							vars[route.route[j].replace(':', '')] = page[i];
+						}
+					}
 				}
 			}
 			if (route) {
-				route.handler();
+				route.handler(vars);
 			} else {
 				this.noRoute();
 			}
