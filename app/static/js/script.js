@@ -35,6 +35,35 @@
 		}
 	};
 
+	// let appData = {
+	// 	git: {
+	// 		repos: []
+	// 	}
+	// };
+
+	class AppData {
+		constructor() {
+			this.git = {
+				repos: []
+			};
+		}
+	}
+	let appData = new AppData();
+
+	const appDataHelper = {
+		// TODO: Do I wanna put the filler functions in here?
+		store: function() {
+			localStorage.setItem('appData', JSON.stringify(appData));
+		},
+		fetch: function() {
+			appData = new AppData();
+			const fetchedData = JSON.parse(localStorage.getItem('appData'));
+			fetchedData.git.repos.forEach(function(repo) {
+				new Repo(repo, true);
+			});
+		}
+	};
+
 	// API class
 	class API {
 		constructor(server) {
@@ -57,6 +86,54 @@
 			API.send();
 		}
 	}
+
+	// Repo class
+	class Repo {
+		constructor(data, persistant) {
+			let isThere = false;
+			this.flow = {};
+			appData.git.repos.forEach(function(repo) {
+				if (repo.name === data.name) {
+					console.log('catched: ' + repo.name);
+					isThere = true;
+					repo.flow.testing = true;
+					return repo;
+				}
+			});
+			if (isThere) {
+				console.log('I should not be here, but I am?');
+				this.isThere = true;
+			} else {
+				if (persistant) {
+					Object.assign(this, data);
+					this.flow.persistant = true;
+				} else {
+					if (settings.debug) {
+						// If debug, store the complete gitData with it
+						// Do not use this within the app!
+						// this.gitData = data;
+					}
+					// TODO: Find out how we can store the data (using local storage) and restore it properly. Do we still have the class reference? Can we just input the plain data into a 'new Repo()'? Should we store under the 'user/repo' name and try to fetch that way?
+					this.name = data.name;
+					
+		
+				}
+				console.log('pushed: ' + this.name);
+				appData.git.repos.push(this);
+			}
+		}
+
+		// Extention methods
+		// This will probably even update in the appData
+		countAllCommits(refresh) {
+			if (!this.totalAllCommits || refresh) {
+				console.log('fetching');
+				this.totalAllCommits = 5;
+			} else {
+				return this.totalAllCommits;
+			}
+		}
+	}
 	
 	// App
 	class App {
@@ -75,9 +152,27 @@
 			// Add all routes
 			router.add('/', function() {
 				const gitAPI = new API('https://api.github.com');
+				appDataHelper.fetch();
+				console.log(appData);
 				gitAPI.call('/orgs/cmda-minor-web/repos', function(data) {
-					const gitDATA = data;
-					console.log(gitDATA);
+					// console.log(gitDATA);
+					data.forEach(function(repo) {
+						const repos = new Repo(repo);
+						if (!repo.flow) {
+							repo.flow = {};
+						}
+						repo.flow.thisOne = true;
+						// TODO: Currently we are not sure this is actually the class that is stored in the Appdata. This is because the Appdata constructor is not returning the value that is expected, but a rather empty version (on purpose, since we don't want to add the duplicate to the appData)
+						console.log(repos);
+						console.log(repo.name);
+						repos.countAllCommits();
+						const p = document.createElement('p');
+						p.innerText = repo.name;
+						document.body.appendChild(p);
+					});
+					// appDataHelper.store();
+					console.log(appData);
+					
 				});
 			});
 			router.add('/test', function() {

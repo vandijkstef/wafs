@@ -62,6 +62,11 @@ By using the "popstate" event, you can catch any history traversion from the bro
 
 ---
 
+## Web app docs
+TODO: ...
+
+---
+
 ## Process
 ### Wednesday 7-2-2018
 Setup the basic structure for the app using ES6 features. Added some basic styles.
@@ -69,6 +74,8 @@ Setup the basic structure for the app using ES6 features. Added some basic style
 ### Monday 12-2-2018
 Redone the basic structure for the new API app. Created API Class, fetched some data, created basic router, everything based on pretty urls/history api. Expanded router to accept variables from urls. Note: Solid urls should be defined before var urls. This could be solved by assigning a score to specifity of the url compared to the mathed route and use the most specific route. Out of scope (for now, maybe).
 
+### Wednesday..
+Lets try some different templating methods using a basic list for the repos including the count of all commits
 
 ## Planning/Todo
 I like lists
