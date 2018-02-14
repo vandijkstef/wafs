@@ -144,11 +144,13 @@
 		getAllForks(refresh) {
 			if (!this.forks || refresh) {
 				this.forks = [];
-				let forks = this.forks;
+				// let forks = this.forks;
 				const gitAPI = new GitAPI();
-				console.log(" AM HERE BRUH");
-				gitAPI.call(this.urls.forks).then(function(data) {
-					console.log(9,data);
+				console.log('AM HERE BRUH');
+				gitAPI.call(this.urls.forks).then(console.log(11, 'test'));
+				gitAPI.call(this.urls.forks).then(() => {
+					console.log(12, 'test mo');
+					return;
 				});
 				// gitAPI.callCallback(this.urls.forks, function(data) {
 				// 	data.forEach(function(fork) {
