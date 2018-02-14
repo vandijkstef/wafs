@@ -13,7 +13,7 @@
 	let guacamole = {
 		render: function(list) {
 			let body = window.document.body
-			template = "<div><h1>{{title}}</h1><img src='{{image}}'/></div>";
+			
 			
 
 			let renderList = "";
