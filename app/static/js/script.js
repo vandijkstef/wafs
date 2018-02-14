@@ -67,10 +67,11 @@
 		}
 
 		call(path) {
-			const promise = new Promise((resolve, reject) => {
+			const self = this;
+			const promise = new Promise(function(resolve, reject) {
 				const API = new XMLHttpRequest();
-				path = path.replace(this.server, '');
-				API.open('GET', this.server + path);
+				path = path.replace(self.server, '');
+				API.open('GET', self.server + path);
 				API.setRequestHeader('Content-Type', 'application/json');
 				API.onload = function() {
 					if (API.status === 200) {
@@ -79,6 +80,7 @@
 						reject('We didn\'t receive 200 status');
 					}
 				};
+				API.send();
 			});
 			return promise;
 		}
@@ -147,11 +149,16 @@
 				// let forks = this.forks;
 				const gitAPI = new GitAPI();
 				console.log('AM HERE BRUH');
-				gitAPI.call(this.urls.forks).then(console.log(11, 'test'));
-				gitAPI.call(this.urls.forks).then(() => {
-					console.log(12, 'test mo');
-					return;
-				});
+				gitAPI.call(this.urls.forks)
+					.then(console.log(11, 'test'))
+					.catch(console.log(11, 'catching'));
+				gitAPI.call(this.urls.forks)
+					.then(function(data) {
+						console.log(12, data);
+					})
+					.catch(function(data) {
+						console.log(13, data);
+					});
 				// gitAPI.callCallback(this.urls.forks, function(data) {
 				// 	data.forEach(function(fork) {
 				// 		this.fork = {
