@@ -74,7 +74,10 @@ Setup the basic structure for the app using ES6 features. Added some basic style
 ### Monday 12-2-2018
 Redone the basic structure for the new API app. Created API Class, fetched some data, created basic router, everything based on pretty urls/history api. Expanded router to accept variables from urls. Note: Solid urls should be defined before var urls. This could be solved by assigning a score to specifity of the url compared to the mathed route and use the most specific route. Out of scope (for now, maybe).
 
-### Wednesday..
+### Wednesday 14-4-2018
+Expanded the app into multiple api calls (backend), implemented a promise version of the API call. Worked a long time on having the right data on the appdata. Had to do API auth to increase limit to 5000/hr instead of 60/hr. Reworked the complete app into modules.
+
+### ...
 Lets try some different templating methods using a basic list for the repos including the count of all commits
 
 ## Planning/Todo
