@@ -6,6 +6,7 @@ import appDataHelper from './appDataHelper.js';
 import Repo from './Repo.js';
 import router from './router.js';
 import GitAPI from './GitAPI.js';
+import UItools from './vandy.js';
 
 {
 	let appData = new AppData();
@@ -22,7 +23,12 @@ import GitAPI from './GitAPI.js';
 		}
 
 		logCalls() {
-			console.log('calls', appData.apiCalls);
+			if (!this.logCounter) {
+				this.logCounter = UItools.renderDiv(0, document.body, null, 'logCounter');
+			}
+			if (appData.apiCalls.toString() !== this.logCounter.innerHTML) {
+				this.logCounter.innerHTML = appData.apiCalls;
+			}
 			setTimeout(() => {
 				this.logCalls();
 			}, 1000);
@@ -37,6 +43,8 @@ import GitAPI from './GitAPI.js';
 			router.add('/', function() {
 				const gitAPI = new GitAPI();
 				appDataHelper.fetch();
+				// TODO: This should probably be a promise and required to chain .then to get to rendering
+				// Also, why is there so much logic within the router handler?
 				gitAPI.callCallback(appData, '/orgs/cmda-minor-web/repos', function(data) {
 					data.forEach(function(repo) {
 						const repos = new Repo(appData, repo);
@@ -44,35 +52,37 @@ import GitAPI from './GitAPI.js';
 							repo.flow = {};
 						}
 						repos.flow.firstLoop = true;
-						console.log(repos);
-						repos.countAllCommits();
-						const p = document.createElement('p');
-						p.innerText = repo.name;
-						document.body.appendChild(p);
+						repos.countAllCommits(false, () => {
+							UItools.renderDiv(`<a href="/repo/${repo.name}">${repo.name}</a>`, document.body, 'repos', repo.name);
+						});
 					});
-					console.log(appData);
+					debug.log('appData', appData);
 				});
+			}, 'Home');
+			router.add('/repo', function() {
+				debug.log('eehrm..');
 			});
-			router.add('/test', function() {
-				console.log('chocolate');
-			});
-			router.add('/test/novar', function() {
-				console.log('no var');
-			});
-			router.add('/test/:var', function(vars) {
-				console.log('testolate');
-				console.log(vars.var);
+			router.add('/repo/:var', function(vars) {
+				debug.log('reponame', vars.var);
 			});
 
 			// And try to render the page
 			router.go();
 		}
-		
 	}
 
 	// TODO: Create a templating thingy?;
+
+
 	// TODO: Maybe look into the not-simple way to inject HTML
-	// TODO: Rework Vandy.UI tools for this?
+
+	// So.. UI
+	// Ideally I want to build all the UI straight from the application
+	// Every page should render its own section, at the moment it needs it
+	// If the section is there, it should try to update the section
+	// Above 2 rules should apply to elements/components within the section
+	// Optionally, I want to upgrade this system into using a "virtual DOM", much like react does
+
 
 	window.addEventListener('DOMContentLoaded', function() {
 		new App();

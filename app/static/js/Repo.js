@@ -42,7 +42,7 @@ class Repo {
 
 	// Extention methods
 	// This will probably even update in the appData (if we call this on the item that is placed there)
-	countAllCommits(refresh) {
+	countAllCommits(refresh, callback) {
 		if (!this.totalAllCommits || refresh) {
 			// const gitAPI = new GitAPI();
 			this.getAllForks(refresh, () => {
@@ -55,19 +55,19 @@ class Repo {
 								data.iDidIt = true;
 							});
 							// console.log(20, data);
-							console.log('im done with this');
+							// console.log('im done with this');
 							// TODO: HERE
-							
+
 						})
 						.catch(() => {
 							debug.warn('Repo: countAllCommits: callPromise: catch()');
 						});
 				});
+				this.totalAllCommits = 5;
+				return callback(this);
 			});
-
-			this.totalAllCommits = 5;
 		} else {
-			return this.totalAllCommits;
+			return callback(this);
 		}
 		// console.log(appData);
 	}
@@ -76,7 +76,6 @@ class Repo {
 		if (!this.forks || refresh) {
 			this.forks = [];
 			const gitAPI = new GitAPI();
-			console.log(55, this);
 			gitAPI.callPromise(this.appData, this.urls.forks)
 				.then((data) => {
 					data.forEach((forkData) => {

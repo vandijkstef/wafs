@@ -10,7 +10,6 @@ class API {
 	callCallback(appData, path, callback) {
 		debug.log('API: Calling: "' + path + '" on ' + this.server);
 		const API = new XMLHttpRequest();
-		console.log(path);
 		path = path.replace(this.server, ''); // Git gives full urls, so strip the server from the url
 		API.open('GET', this.server + path + '?access_token=' + settings.tokens.git);
 		API.setRequestHeader('Content-Type', 'application/json');
@@ -37,7 +36,6 @@ class API {
 				if (API.status === 200) {
 					resolve(JSON.parse(API.responseText));
 				} else {
-					console.log('really?');
 					reject('We didn\'t receive 200 status');
 				}
 			};
