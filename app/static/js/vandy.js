@@ -1,6 +1,4 @@
-'use strict';
-const vandy = {};
-vandy.UI = {
+const UItools = {
 	addClasses: function(element, classes) {
 		if (classes) {
 			if (typeof classes === 'string') {
@@ -15,18 +13,18 @@ vandy.UI = {
 		}
 		return element;
 	},
-	getText: function() {
+	getText: function(string) {
 		var el = document.createElement('p');
+		el.innerHTML = string;
 		return el;
 	},
 	renderText: function(string, container) {
-		var el = this.getText();
-		el.innerHTML = string;
+		var el = this.getText(string);
 		container.appendChild(el);
 	},
 	getDiv: function(classes, id) {
 		var el = document.createElement('div');
-		el = vandy.UI.addClasses(el, classes);
+		el = this.addClasses(el, classes);
 		if (id) {
 			el.id = id;
 		}
@@ -34,7 +32,16 @@ vandy.UI = {
 	},
 	renderDiv: function(content, container, classes, id) {
 		var div = this.getDiv(classes, id);
-		div.innerHTML = content;
+		if (!Array.isArray(content)) {
+			content = [content];
+		}
+		content.forEach(function(item) {
+			if (typeof item === 'object') {
+				div.appendChild(item);
+			} else {
+				div.innerHTML += item;
+			}
+		});
 		container.appendChild(div);
 		return div;
 	},
@@ -45,6 +52,13 @@ vandy.UI = {
 			el.innerHTML = item;
 			ul.appendChild(el);
 		});
+		return ul;
+	},
+	getLinkList: function(items) {
+		var texts = items.map(function(item) {
+			return `<a href="${item.path}">${item.name}</a>`;
+		});
+		var ul = this.getList(texts);
 		return ul;
 	},
 	getForm: function(name, action, method) {
@@ -72,3 +86,5 @@ vandy.UI = {
 		return input;
 	}
 };
+
+export default UItools;

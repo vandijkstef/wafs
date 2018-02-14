@@ -1,5 +1,6 @@
 import debug from './debug.js';
 import Route from './Route.js';
+import UI from './UI.js';
 
 const router = {
 	routes: [],
@@ -31,7 +32,7 @@ const router = {
 			if (route) {
 				break;
 			}
-			console.log(this.routes[i].route);
+			// console.log(this.routes[i].route);
 			if (this.compareRoute(this.routes[i].route, page)) {
 				debug.log('Router: Assigning: ' + this.routes[i].route);
 				route = this.routes[i];
@@ -45,6 +46,8 @@ const router = {
 		}
 		if (route) {
 			route.handler(vars);
+			console.log('Am I done with handler?');
+			UI.render();
 		} else {
 			this.noRoute();
 		}
@@ -56,10 +59,13 @@ const router = {
 	},
 	// Helpers
 	// Add new route to the router
-	add: function(route, handler) {
+	add: function(route, handler, menu) {
 		debug.log('Router: Add: ' + route);
 		// TODO: Test route validity? -> Do we wanna pass in the route as an array? Or make it optional?
 		this.routes.push(new Route(this.parseLocation(route), handler));
+		if (menu) {
+			UI.addNav(menu, route);
+		}
 	},
 	// Splits the URL, returns the path as an array
 	parseLocation(pathname) {
@@ -80,7 +86,7 @@ const router = {
 					if (route[i][0] === ':') {
 						return true;
 					}
-					console.log('I guess I will never this, am I rite?');
+					debug.warn('Notify dev if you see this');
 					return false;
 				}
 			}
