@@ -34,10 +34,12 @@
 		},
 		fetch: function() {
 			appData = new AppData();
-			const fetchedData = JSON.parse(localStorage.getItem('appData'));
-			fetchedData.git.repos.forEach(function(repo) {
-				new Repo(repo, true);
-			});
+			if (localStorage.getItem('appData')) {
+				const fetchedData = JSON.parse(localStorage.getItem('appData'));
+				fetchedData.git.repos.forEach(function(repo) {
+					new Repo(repo, true);
+				});
+			}
 		}
 	};
 
@@ -48,9 +50,10 @@
 			this.server = server;
 		}
 
-		call(path, callback) {
+		callCallback(path, callback) {
 			debug.log('API: Calling: "' + path + '" on ' + this.server);
 			const API = new XMLHttpRequest();
+			path = path.replace(this.server, '');
 			API.open('GET', this.server + path);
 			API.setRequestHeader('Content-Type', 'application/json');
 			API.onload = function() {
@@ -62,6 +65,30 @@
 			};
 			API.send();
 		}
+
+		call(path) {
+			const promise = new Promise((resolve, reject) => {
+				const API = new XMLHttpRequest();
+				path = path.replace(this.server, '');
+				API.open('GET', this.server + path);
+				API.setRequestHeader('Content-Type', 'application/json');
+				API.onload = function() {
+					if (API.status === 200) {
+						resolve(JSON.parse(API.responseText));
+					} else {
+						reject('We didn\'t receive 200 status');
+					}
+				};
+			});
+			return promise;
+		}
+	}
+
+	class GitAPI extends API {
+		// Just for sake of lolz
+		constructor() {
+			super('https://api.github.com');
+		}
 	}
 
 	// Repo class
@@ -72,14 +99,12 @@
 			appData.git.repos.forEach(function(repo) {
 				if (repo.name === data.name) {
 					console.log('catched: ' + repo.name);
-					isThere = true;
-					repo.flow.testing = true;
-					return repo;
+					isThere = repo;
+					repo.flow.duplicate = true;
 				}
 			});
 			if (isThere) {
-				console.log('I should not be here, but I am?');
-				this.isThere = true;
+				return isThere;
 			} else {
 				if (persistant) {
 					Object.assign(this, data);
@@ -90,23 +115,58 @@
 						// Do not use this within the app!
 						this.gitData = data;
 					}
+					this.flow.new = true;
 					this.name = data.name;
-					
-		
+					this.urls = {
+						forks: this.gitData.forks_url
+					};
 				}
-				console.log('pushed: ' + this.name);
 				appData.git.repos.push(this);
 			}
 		}
 
 		// Extention methods
-		// This will probably even update in the appData
+		// This will probably even update in the appData (if we call this on the item that is placed there)
 		countAllCommits(refresh) {
 			if (!this.totalAllCommits || refresh) {
-				console.log('fetching');
+				console.log('TODO: fetching..');
+
+				this.getAllForks(refresh);
+				// console.log(forks);
+
 				this.totalAllCommits = 5;
 			} else {
 				return this.totalAllCommits;
+			}
+			console.log(appData);
+		}
+
+		getAllForks(refresh) {
+			if (!this.forks || refresh) {
+				this.forks = [];
+				let forks = this.forks;
+				const gitAPI = new GitAPI();
+				console.log(" AM HERE BRUH");
+				gitAPI.call(this.urls.forks).then(function(data) {
+					console.log(9,data);
+				});
+				// gitAPI.callCallback(this.urls.forks, function(data) {
+				// 	data.forEach(function(fork) {
+				// 		this.fork = {
+				// 			owner: fork.name,
+				// 			urls: {
+				// 				contributions: fork.contributors_url
+				// 			}
+				// 		};
+				// 		// TODO: Promise shit....
+				// 		forks.push(fork);
+				// 	});
+				// 	return this.forks;
+				// });
+				// let value = promise().then(return theValue).then(return anotherValue);
+				// console.log(value);
+			} else {
+				return this.forks;
 			}
 		}
 	}
@@ -127,28 +187,22 @@
 
 			// Add all routes
 			router.add('/', function() {
-				const gitAPI = new API('https://api.github.com');
+				const gitAPI = new GitAPI();
 				appDataHelper.fetch();
-				console.log(appData);
-				gitAPI.call('/orgs/cmda-minor-web/repos', function(data) {
-					// console.log(gitDATA);
+				gitAPI.callCallback('/orgs/cmda-minor-web/repos', function(data) {
 					data.forEach(function(repo) {
 						const repos = new Repo(repo);
 						if (!repo.flow) {
 							repo.flow = {};
 						}
-						repo.flow.thisOne = true;
-						// TODO: Currently we are not sure this is actually the class that is stored in the Appdata. This is because the Appdata constructor is not returning the value that is expected, but a rather empty version (on purpose, since we don't want to add the duplicate to the appData)
+						repos.flow.firstLoop = true;
 						console.log(repos);
-						console.log(repo.name);
 						repos.countAllCommits();
 						const p = document.createElement('p');
 						p.innerText = repo.name;
 						document.body.appendChild(p);
 					});
-					// appDataHelper.store();
 					console.log(appData);
-					
 				});
 			});
 			router.add('/test', function() {
@@ -233,9 +287,7 @@
 		// Add new route to the router
 		add: function(route, handler) {
 			debug.log('Router: Add: ' + route);
-			// TODO: Add route class
 			// TODO: Test route validity? -> Do we wanna pass in the route as an array? Or make it optional?
-			// this.routes.push({route: this.parseLocation(route), handler: handler});
 			this.routes.push(new Route(this.parseLocation(route), handler));
 		},
 		// Splits the URL, returns the path as an array
