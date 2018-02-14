@@ -3,7 +3,10 @@
 {
 	// App settings
 	const settings = {
-		debug: true
+		debug: true,
+		tokens: {
+			git: '6eeca6c5c52087f95f8ebdbdaa3720efb2ad7c55'
+		}
 	};
 	
 	// Debug helper - Splits (temporary) console.logs from solid logs
@@ -12,6 +15,9 @@
 			if (settings.debug) {
 				console.log(data);
 			}
+		},
+		warn: function(data) {
+			console.warn(data);
 		}
 	};
 
@@ -43,7 +49,7 @@
 		}
 	};
 
-	// API class
+	// API classes
 	class API {
 		constructor(server) {
 			debug.log('API: Created for: ' + server);
@@ -54,7 +60,7 @@
 			debug.log('API: Calling: "' + path + '" on ' + this.server);
 			const API = new XMLHttpRequest();
 			path = path.replace(this.server, '');
-			API.open('GET', this.server + path);
+			API.open('GET', this.server + path + '?access_token=' + settings.tokens.git);
 			API.setRequestHeader('Content-Type', 'application/json');
 			API.onload = function() {
 				if (API.status === 200) {
@@ -66,12 +72,11 @@
 			API.send();
 		}
 
-		call(path) {
-			const self = this;
-			const promise = new Promise(function(resolve, reject) {
+		callPromise(path) {
+			const promise = new Promise((resolve, reject) => {
 				const API = new XMLHttpRequest();
-				path = path.replace(self.server, '');
-				API.open('GET', self.server + path);
+				path = path.replace(this.server, ''); // Git gives full urls, so strip the server from the url
+				API.open('GET', this.server + path + '?access_token=' + settings.tokens.git);
 				API.setRequestHeader('Content-Type', 'application/json');
 				API.onload = function() {
 					if (API.status === 200) {
@@ -98,16 +103,19 @@
 		constructor(data, persistant) {
 			let isThere = false;
 			this.flow = {};
+
+			// Test if we are not adding duplicates
 			appData.git.repos.forEach(function(repo) {
 				if (repo.name === data.name) {
-					console.log('catched: ' + repo.name);
-					isThere = repo;
 					repo.flow.duplicate = true;
+					isThere = repo;
 				}
 			});
+
 			if (isThere) {
 				return isThere;
 			} else {
+
 				if (persistant) {
 					Object.assign(this, data);
 					this.flow.persistant = true;
@@ -115,15 +123,16 @@
 					if (settings.debug) {
 						// If debug, store the complete gitData with it
 						// Do not use this within the app!
-						this.gitData = data;
+						this._gitData = data;
 					}
 					this.flow.new = true;
 					this.name = data.name;
 					this.urls = {
-						forks: this.gitData.forks_url
+						forks: data.forks_url
 					};
 				}
 				appData.git.repos.push(this);
+
 			}
 		}
 
@@ -131,10 +140,20 @@
 		// This will probably even update in the appData (if we call this on the item that is placed there)
 		countAllCommits(refresh) {
 			if (!this.totalAllCommits || refresh) {
-				console.log('TODO: fetching..');
-
-				this.getAllForks(refresh);
-				// console.log(forks);
+				this.getAllForks(refresh, () => {
+					// Get contributors per fork
+					this.forks.forEach(function(fork) {
+						const gitAPI = new GitAPI();
+						gitAPI.callPromise(fork.urls.contributors)
+							.then((data) => {
+								// TODO: HERE
+								console.log(20, data);
+							})
+							.catch(() => {
+								console.log('Oops');
+							});
+					});
+				});
 
 				this.totalAllCommits = 5;
 			} else {
@@ -143,39 +162,31 @@
 			console.log(appData);
 		}
 
-		getAllForks(refresh) {
+		getAllForks(refresh, callback) {
 			if (!this.forks || refresh) {
 				this.forks = [];
-				// let forks = this.forks;
 				const gitAPI = new GitAPI();
-				console.log('AM HERE BRUH');
-				gitAPI.call(this.urls.forks)
-					.then(console.log(11, 'test'))
-					.catch(console.log(11, 'catching'));
-				gitAPI.call(this.urls.forks)
-					.then(function(data) {
-						console.log(12, data);
+				gitAPI.callPromise(this.urls.forks)
+					.then((data) => {
+						data.forEach((forkData) => {
+							const fork = {
+								owner: forkData.owner.login,
+								urls: {
+									contributors: forkData.contributors_url
+								}
+							};
+							if (settings.debug) {
+								fork._forkData = forkData;
+							}
+							this.forks.push(fork);
+						});
+						return callback(this.forks);
 					})
-					.catch(function(data) {
-						console.log(13, data);
+					.catch(function() {
+						debug.warn('No API data');
 					});
-				// gitAPI.callCallback(this.urls.forks, function(data) {
-				// 	data.forEach(function(fork) {
-				// 		this.fork = {
-				// 			owner: fork.name,
-				// 			urls: {
-				// 				contributions: fork.contributors_url
-				// 			}
-				// 		};
-				// 		// TODO: Promise shit....
-				// 		forks.push(fork);
-				// 	});
-				// 	return this.forks;
-				// });
-				// let value = promise().then(return theValue).then(return anotherValue);
-				// console.log(value);
 			} else {
-				return this.forks;
+				return callback(this.forks);
 			}
 		}
 	}
