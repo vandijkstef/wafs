@@ -15,30 +15,7 @@
 		}
 	};
 
-	const tools = {
-		// Compares arrays, but is aware of var path parts
-		// Might suit better within the routerv
-		compareRoute: function(route, path) {
-			if (route.length === path.length) {
-				for (let i = 0; i < route.length; i++) {
-					if (route[i] !== path[i]) {
-						if (route[i][0] === ':') {
-							return true;
-						}
-						console.log('I guess I will never this, am I rite?');
-						return false;
-					}
-				}
-				return true;
-			}
-			return false;
-		}
-	};
-
-	// let appData = {
-	// 	git: {
-	// 		repos: []
-	// 	}
+	// const tools = {
 	// };
 
 	class AppData {
@@ -111,9 +88,8 @@
 					if (settings.debug) {
 						// If debug, store the complete gitData with it
 						// Do not use this within the app!
-						// this.gitData = data;
+						this.gitData = data;
 					}
-					// TODO: Find out how we can store the data (using local storage) and restore it properly. Do we still have the class reference? Can we just input the plain data into a 'new Repo()'? Should we store under the 'user/repo' name and try to fetch that way?
 					this.name = data.name;
 					
 		
@@ -191,9 +167,15 @@
 		}
 		
 	}
+
+	class Route {
+		constructor(route, handler) {
+			this.route = route;
+			this.handler = handler;
+		}
+	}
 	
 	// Router
-	// TODO: Subpages/variable passing...
 	const router = {
 		routes: [],
 		init() {
@@ -214,13 +196,6 @@
 				});
 			});
 		},
-		// Add new route to the router
-		add: function(route, handler) {
-			debug.log('Router: Add: ' + route);
-			// TODO: Add route class
-			// TODO: Test route validity? -> Do we wanna pass in the route as an array? Or make it optional?
-			this.routes.push({route: this.parseLocation(route), handler: handler});
-		},
 		// Go to the current path, the <a> click handler takes care of this
 		go: function() {
 			let route;
@@ -231,7 +206,8 @@
 				if (route) {
 					break;
 				}
-				if (tools.compareRoute(this.routes[i].route, page)) {
+				console.log(this.routes[i].route);
+				if (this.compareRoute(this.routes[i].route, page)) {
 					debug.log('Router: Assigning: ' + this.routes[i].route);
 					route = this.routes[i];
 					// Scan the route for variables, add them to the vars object
@@ -248,8 +224,22 @@
 				this.noRoute();
 			}
 		},
+		// 404
+		noRoute: function() {
+			// Render 404 page
+			console.warn(404);
+		},
+		// Helpers
+		// Add new route to the router
+		add: function(route, handler) {
+			debug.log('Router: Add: ' + route);
+			// TODO: Add route class
+			// TODO: Test route validity? -> Do we wanna pass in the route as an array? Or make it optional?
+			// this.routes.push({route: this.parseLocation(route), handler: handler});
+			this.routes.push(new Route(this.parseLocation(route), handler));
+		},
 		// Splits the URL, returns the path as an array
-		parseLocation: function(pathname) {
+		parseLocation(pathname) {
 			let path = [];
 			pathname = pathname.split('/');
 			// Clear empty elements
@@ -260,10 +250,20 @@
 			});
 			return path;
 		},
-		// 404
-		noRoute: function() {
-			// Render 404 page
-			console.warn(404);
+		compareRoute: function(route, path) {
+			if (route.length === path.length) {
+				for (let i = 0; i < route.length; i++) {
+					if (route[i] !== path[i]) {
+						if (route[i][0] === ':') {
+							return true;
+						}
+						console.log('I guess I will never this, am I rite?');
+						return false;
+					}
+				}
+				return true;
+			}
+			return false;
 		}
 	};
 	
