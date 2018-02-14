@@ -18,7 +18,7 @@
 
 			let renderList = "";
 
-			list.map(function(i, data) {
+			list.map(function(i) {
 				body.innerHTML += `
 				<div>
 					<h1>${i.title}</h1>
