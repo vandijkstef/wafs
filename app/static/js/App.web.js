@@ -44,7 +44,17 @@ import UI from './UI.js';
 				const gitAPI = new GitAPI();
 				// TODO: This should probably be a promise and required to chain .then to get to rendering
 				gitAPI.callCallback(appData, '/orgs/cmda-minor-web/repos', function(data) {
-					UI.renderRepos(data);
+					// TODO: create new Repo, render list based on appData?
+					// TODO: generalise named objectarray testing
+					UI.renderRepoList(data);
+					// const repos = new Repo(appData, repo); 
+					// if (!repo.flow) { 
+					// repo.flow = {}; 
+					// } 
+					// repos.flow.firstLoop = true; 
+					// repos.countAllCommits(false, () => { 
+					// UItools.renderDiv(`<a href="/repo/${repo.name}">${repo.name}</a>`, document.body, 'repos', repo.name); 
+					// }); 
 				});
 			}, 'Repos');
 			router.add('/repo/:var', function(vars) {

@@ -47,7 +47,7 @@ const UI = {
 			this._.footer.logCounter.innerHTML = calls;
 		}
 	},
-	renderRepos: function(repos) {
+	renderRepoList: function(repos) {
 		repos.forEach((repo) => {
 			UItools.renderDiv(`<a href="/repo/${repo.name}">${repo.name}</a>`, this._.main.element, 'repos', repo.name);
 		});
