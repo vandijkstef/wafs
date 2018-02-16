@@ -5,6 +5,7 @@ $white: rgb(230, 230, 230);
 $orange: rgb(255, 99, 68);
 $trans: .2s;
 
+// Common
 * {
     box-sizing: border-box;
 }
@@ -13,11 +14,8 @@ $trans: .2s;
     display: none;
 }
 
-body {
-    font-family: Ubuntu, Calibri, Arial, Helvetica, sans-serif;
-    background-color: $brown;
-    color: $white;
-	margin: 0;
+p {
+    margin: 0;
 }
 
 a {
@@ -29,11 +27,20 @@ a {
     }
 }
 
-nav {
+// Main items
+body {
+    font-family: Ubuntu, Calibri, Arial, Helvetica, sans-serif;
+    background-color: $brown;
+    color: $white;
+	margin: 0;
+}
+
+nav, footer {
     display: flex;
     justify-content: flex-end;
     background-color: $yellow;
     margin: 0;
+    color: $brown;
     ul {
         padding: 0;
         margin: 0;
@@ -54,4 +61,24 @@ nav {
     }
 }
 
+// nav {
+// }
 
+main {
+    min-height: 80vh;
+    // I want sections here!
+    & > div {
+        max-width: 40em;
+        margin: 0 auto;
+    }
+}
+
+footer {
+    padding: 1em 1.5em .4em;
+}
+
+// Detail stuff
+
+#logCounter {
+    display: flex;
+}
