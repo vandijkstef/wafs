@@ -1,20 +1,14 @@
 import settings from './settings.js';
 import GitAPI from './GitAPI.js';
 import debug from './debug.js';
+import tools from './tools.js';
 
 class Repo {
 	constructor(appData, data, persistant) {
-		let isThere = false;
 		this.flow = {};
 		this.gitAPI = new GitAPI();
 		this.appData = appData;
-		// Test if we are not adding duplicates
-		appData.git.repos.forEach(function(repo) {
-			if (repo.name === data.name) {
-				repo.flow.duplicate = true;
-				isThere = repo;
-			}
-		});
+		let isThere = tools.testDuplicateNamedObjectArray(data, this.appData.git.repos);
 
 		// Actually do what the constructor should...
 		if (isThere) {
