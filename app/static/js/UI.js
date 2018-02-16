@@ -1,13 +1,31 @@
 import UItools from './vandy.js';
 import debug from './debug.js';
 
+// So.. UI
+// Ideally I want to build all the UI straight from the application
+// Every page should render its own section, at the moment it needs it
+// If the section is there, it should try to update the section
+// Above 2 rules should apply to elements/components within the section
+// Optionally, I want to upgrade this system into using a "virtual DOM", much like react does
+
+// So, stating the above
+// TODO: Create section stuff
+// TODO: Do some test to see if we can update stuff instead of re-rendering
+
+
+
+// We have routes that should correspond to sections
+// Thus, every route should create a section (upon fetching that route?)
+// If we store this in the router.Route, we can pass the Route to the UI class together with the full appData
+// Thus, we can define our templates within the Route?
+
 const UI = {
 	_: {
 		nav: {
-			data: []
+			data: [] // Do I want to keep data in here? Or do I only wanna do this for the nav?
 		},
 		main: {
-			sections: []
+			sections: [] // Guess Ill never use this?
 		},
 		footer: {
 		}
@@ -23,10 +41,10 @@ const UI = {
 		if (!this._.footer.element) {
 			this._.footer.element = document.querySelector('footer');
 		}
+		this.renderNav();
 	},
 	render: function() {
 		debug.log('UI: Render');
-		this.renderNav();
 	},
 	addNav: function(name, path) {
 		const menuItem = {
@@ -47,8 +65,8 @@ const UI = {
 			this._.footer.logCounter.innerHTML = calls;
 		}
 	},
-	renderRepoList: function(repos) {
-		repos.forEach((repo) => {
+	renderRepoList: function(appData) {
+		appData.git.repos.forEach((repo) => {
 			UItools.renderDiv(`<a href="/repo/${repo.name}">${repo.name}</a>`, this._.main.element, 'repos', repo.name);
 		});
 	},
@@ -58,10 +76,10 @@ const UI = {
 
 };
 
-class UISection {
-	constructor(name, data) {
+// class UISection {
+// 	constructor(name, data) {
 		
-	}
-}
+// 	}
+// }
 
 export default UI;
