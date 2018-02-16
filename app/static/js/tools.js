@@ -5,14 +5,10 @@ const tools = {
 	testDuplicateNamedObjectArray: function(needle, stack) {
 		let returnValue = false;
 		stack.forEach((item) => {
-			console.log(85, item.name);
-			console.log(86, needle.name);
 			if (item.name === needle.name) {
-				console.log('found item', item.name);
 				returnValue = item;
 			}
 		});
-		console.log('new item', needle.name);
 		return returnValue;
 	}
 };
