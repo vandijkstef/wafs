@@ -3,10 +3,9 @@ import AppData from './AppData.js';
 import debug from './debug.js';
 // import settings from './settings.js';
 import appDataHelper from './appDataHelper.js';
-import Repo from './Repo.js';
 import router from './router.js';
 import GitAPI from './GitAPI.js';
-import UItools from './vandy.js';
+import UI from './UI.js';
 
 {
 	let appData = new AppData();
@@ -22,13 +21,9 @@ import UItools from './vandy.js';
 			});
 		}
 
+
 		logCalls() {
-			if (!this.logCounter) {
-				this.logCounter = UItools.renderDiv(0, document.body, null, 'logCounter');
-			}
-			if (appData.apiCalls.toString() !== this.logCounter.innerHTML) {
-				this.logCounter.innerHTML = appData.apiCalls;
-			}
+			UI.setApiCalls(appData.apiCalls);
 			setTimeout(() => {
 				this.logCalls();
 			}, 1000);
@@ -37,37 +32,32 @@ import UItools from './vandy.js';
 		// Called by constructor
 		init() {
 			debug.log('App: Init');
+			appDataHelper.fetch();
+			UI.init();
 			router.init();
 
 			// Add all routes
 			router.add('/', function() {
-				const gitAPI = new GitAPI();
-				appDataHelper.fetch();
-				// TODO: This should probably be a promise and required to chain .then to get to rendering
-				// Also, why is there so much logic within the router handler?
-				gitAPI.callCallback(appData, '/orgs/cmda-minor-web/repos', function(data) {
-					data.forEach(function(repo) {
-						const repos = new Repo(appData, repo);
-						if (!repo.flow) {
-							repo.flow = {};
-						}
-						repos.flow.firstLoop = true;
-						repos.countAllCommits(false, () => {
-							UItools.renderDiv(`<a href="/repo/${repo.name}">${repo.name}</a>`, document.body, 'repos', repo.name);
-						});
-					});
-					debug.log('appData', appData);
-				});
+				debug.log('eehrm..');
 			}, 'Home');
 			router.add('/repo', function() {
-				debug.log('eehrm..');
-			});
+				const gitAPI = new GitAPI();
+				// TODO: This should probably be a promise and required to chain .then to get to rendering
+				gitAPI.callCallback(appData, '/orgs/cmda-minor-web/repos', function(data) {
+					UI.renderRepos(data);
+				});
+			}, 'Repos');
 			router.add('/repo/:var', function(vars) {
 				debug.log('reponame', vars.var);
 			});
 
 			// And try to render the page
 			router.go();
+
+			// This is a lil' hacky, but it saves us API calls during dev
+			setTimeout(() => {
+				appDataHelper.store(appData);
+			}, 5000);
 		}
 	}
 

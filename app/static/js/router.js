@@ -6,19 +6,26 @@ const router = {
 	routes: [],
 	init() {
 		debug.log('Router: Init');
+	},
+	catchLinks: function() {
 		// Disable functionality of all A elements...
 		document.querySelectorAll('a').forEach(function(a) {
 			a.addEventListener('click', function(e) {
+				console.log('trying');
+				e.preventDefault(); // Must be last line
 				try {
 					// Try to update the URL, this will fail on external links
 					history.pushState(null, null, e.target.href);
 					// If this didn't fail, we are still here
-					router.go();
-					e.preventDefault(); // Must be last line
 				} catch(error) {
 					// Probably an external url, dont prevent following the link
 					debug.log('External URL', error);
+				} finally {
+					console.log('pushing state');
+					router.go();
+					
 				}
+				return false;
 			});
 		});
 	},
@@ -48,6 +55,7 @@ const router = {
 			route.handler(vars);
 			console.log('Am I done with handler?');
 			UI.render();
+			this.catchLinks();
 		} else {
 			this.noRoute();
 		}
