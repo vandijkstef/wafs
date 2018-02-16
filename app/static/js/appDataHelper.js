@@ -20,7 +20,7 @@ const appDataHelper = {
 		if (localStorage.getItem('appData')) {
 			const fetchedData = JSON.parse(localStorage.getItem('appData'));
 			fetchedData.git.repos.forEach(function(repo) {
-				new Repo(repo, true);
+				new Repo(appData, repo, true);
 			});
 		}
 		return appData;
