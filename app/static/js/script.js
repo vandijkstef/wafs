@@ -1,25 +1,50 @@
 (function() {
 
+
+	let templates = {
+		tags: function(d) {
+
+		},
+		detail: function(d) {
+
+		}
+	}
+
 	let app = {
 		init: function() {
 			guacamole.router.init()
-			console.log("test")
+			guacamole.router.config([
+				{
+					route: "#/tags/:name",
+					template: templates.tags
+				},
+				{
+					route: "#/detail/:id",
+					template: templates.detail
+				}
+
+			])
+			api.fetch("https://api.dribbble.com/v1/shots/?access_token=c5312519011b8c727842737d8bdf60cedc9bf0f3b0cde84875602764160dcf55&per_page=100","GET", true)
+			.then(function(response) {
+				app.config.data = response
+				guacamole.render(response)
+			})
+			.catch(function(e) {
+				console.log(e)
+			})
+
 		},config: {
 			data: []
-
 		}
 	}
 
 	let guacamole = {
 		render: function(list) {
 			let body = window.document.body
-			
-			
-
-			let renderList = "";
+			let template = ``;
 
 			list.map(function(i) {
-				body.innerHTML += `
+				template += `
 				<div>
 					<h1>${i.title}</h1>
 					<img src="${i.images.hidpi}" />
@@ -35,29 +60,37 @@
 
 						<div>
 							${i.tags.map(function(d) {
-								return `<a href="#tags/${d}">${d}</a>`
+								return `<a href="#/tags/${d}">${d}</a>`
 							})}
 						</div>
 					</div>
 				</div>
 				`
 			})
-
+			body.innerHTML = template;
 			
 		},
 
 		router: {
+
 			init: function() {
-				
+				window.addEventListener("hashchange",guacamole.router.checkUrl, true)
 			},
-			config: function(config) {
-				console.log(typeof config);
-				if(typeof config !== 'object') {
-					throw new Error("Give me something to work with idiot. An object perhaps?");
-				}else {
+			checkUrl: function(e) {
+				let url = e.newURL
+				let link = url.match("\#\/[^/#]+")
+				guacamole.router.route(link[0])
+			},
+			routes: [],
+			config: function(routes) {
+				guacamole.router.routes = routes
+			},
+			route: function(url) {
+				if(guacamole.router.routes.includes(url)) {
 
 				}
 			}
+
 
 		}
 	}
@@ -80,14 +113,7 @@
 		}
 	}
 
-	api.fetch("https://api.dribbble.com/v1/shots/?access_token=c5312519011b8c727842737d8bdf60cedc9bf0f3b0cde84875602764160dcf55&per_page=10","GET", true)
-	.then(function(response) {
-		console.log(response)
-		guacamole.render(response)
-	})
-	.catch(function(e) {
-		console.log(e)
-	})
+	
 	
 	app.init()
 
