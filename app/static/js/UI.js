@@ -43,8 +43,13 @@ const UI = {
 		}
 		this.renderNav();
 	},
-	render: function() {
+	render: function(appData, route) {
+		if (!route.section) {
+			this.createSection(route);
+		}
 		debug.log('UI: Render');
+		// appData.git.organisation = 'test';
+		console.log(route.template(appData));
 	},
 	addNav: function(name, path) {
 		const menuItem = {
@@ -72,6 +77,11 @@ const UI = {
 	},
 	clearMain: function() {
 		this._.main.element.innerHTML = '';
+	},
+	createSection: function(route) {
+		// UItools.renderDiv()
+		route.section = UItools.renderDiv('text', this._.main.element, null, route.route);
+		console.log(route);
 	}
 
 };

@@ -16,6 +16,7 @@ const appDataHelper = {
 		localStorage.setItem('appData', JSON.stringify(workData));
 	},
 	fetch: function() {
+		// TODO: What would be an objection into automatically trying to fetch from localStorage in the AppData class itself? Will this screw over saving? (probably not, since if thats the case, we can clear it)
 		let appData = new AppData();
 		if (localStorage.getItem('appData')) {
 			const fetchedData = JSON.parse(localStorage.getItem('appData'));

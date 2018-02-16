@@ -7,7 +7,7 @@ const router = {
 	init() {
 		debug.log('Router: Init');
 	},
-	catchLinks: function() {
+	catchLinks: function(appData) {
 		// Disable functionality of all A elements...
 		document.querySelectorAll('a').forEach(function(a) {
 			a.addEventListener('click', function(e) {
@@ -22,15 +22,14 @@ const router = {
 					debug.log('External URL', error);
 				} finally {
 					console.log('pushing state');
-					router.go();
-					
+					router.go(appData);
 				}
 				return false;
 			});
 		});
 	},
 	// Go to the current path, the <a> click handler takes care of this
-	go: function() {
+	go: function(appData) {
 		let route;
 		const vars = {};
 		const page = this.parseLocation(window.location.pathname);
@@ -54,8 +53,8 @@ const router = {
 		if (route) {
 			route.handler(vars);
 			console.log('Am I done with handler?');
-			UI.render();
-			this.catchLinks();
+			UI.render(appData, route);
+			this.catchLinks(appData);
 		} else {
 			this.noRoute();
 		}
@@ -67,10 +66,10 @@ const router = {
 	},
 	// Helpers
 	// Add new route to the router
-	add: function(route, handler, menu) {
+	add: function(route, handler, template, menu) {
 		debug.log('Router: Add: ' + route);
 		// TODO: Test route validity? -> Do we wanna pass in the route as an array? Or make it optional?
-		this.routes.push(new Route(this.parseLocation(route), handler));
+		this.routes.push(new Route(this.parseLocation(route), handler, template));
 		if (menu) {
 			UI.addNav(menu, route);
 		}
