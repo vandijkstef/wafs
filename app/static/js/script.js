@@ -1,6 +1,5 @@
 (function() {
 
-
 	let templates = {
 		tags: function(d) {
 
@@ -13,7 +12,7 @@
 	let app = {
 		init: function() {
 			guacamole.router.init()
-			guacamole.router.config([
+			guacamole.router.config([ // Array contains 2 objects and 1 item, are you sure you don't want 2 array items containing 1 object each?
 				{
 					route: "#/tags/:name",
 					template: templates.tags
@@ -22,7 +21,6 @@
 					route: "#/detail/:id",
 					template: templates.detail
 				}
-
 			])
 			api.fetch("https://api.dribbble.com/v1/shots/?access_token=c5312519011b8c727842737d8bdf60cedc9bf0f3b0cde84875602764160dcf55&per_page=100","GET", true)
 			.then(function(response) {
@@ -30,10 +28,10 @@
 				guacamole.render(response)
 			})
 			.catch(function(e) {
-				console.log(e)
+				console.warn(e)
 			})
-
-		},config: {
+		},
+		config: {
 			data: []
 		}
 	}
@@ -74,7 +72,7 @@
 		router: {
 
 			init: function() {
-				window.addEventListener("hashchange",guacamole.router.checkUrl, true)
+				window.addEventListener("hashchange", guacamole.router.checkUrl, true)
 			},
 			checkUrl: function(e) {
 				let url = e.newURL
@@ -96,14 +94,14 @@
 	}
 
 	let api = {
-		fetch: function(url, method, async) {
+		fetch: function(url, method, async) { // Suggest to use method, url, async to conform with xhttp.open variable order
 			return new Promise(function(resolve, reject) {
 					let xhttp = new XMLHttpRequest()
 					xhttp.onreadystatechange = function() {
 						if(xhttp.readyState === 4 && xhttp.status >= 200 && xhttp.status < 400) {
 							let parsedData = JSON.parse(xhttp.responseText)
 							resolve(parsedData)
-						}else if(xhttp.status >= 400) {
+						} else if(xhttp.status >= 400) {
 							reject(xhttp.status)
 						}
 					}
@@ -112,8 +110,6 @@
 			})
 		}
 	}
-
-	
 	
 	app.init()
 
