@@ -68,7 +68,8 @@ The web app will show (meta)data on the CMDA-Minor organisation. Main aim for no
 ### Components
 Several variables are used througout the app, and should exclusively be used in as described below. They are not described any further in the docs.
 * appData: The instantiated appData object in the app scope
-* path: An (url)address path, as parsed by the router
+	* AppData should be passed into functions. Currently some classes keep the link to appData stored, but I'm not sure if I like this pattern.
+* route: An (url)address path, as parsed by the router
 
 
 #### App (App.web.js)
@@ -111,16 +112,37 @@ Place a permanent warning in the app
 ##### Constructor (appData, data, persistant)
 data: appData object that will be inserted.
 persistant: Will push all the data on the appData, no matter what, used by appDataHelper.fetch()
+##### getAllForks (refresh, callback)
+refresh: Force fetching of data, even if it's already cached
 
-[IN DEV] Helper functions to fetch data on those repo's
+[MORE IN DEV] Helper functions to fetch data on those repo's
 
-#### Route
-##### Constructor ()
----
+#### Route (Route.js) [Class]
+##### Constructor (route, handler, template)
+handler: Back-end logic for the route [function]  
+template: Template data to pass into UI [In progress] [function]
 
-#### router
-##### Constructor ()
----
+#### router (router.js) [Object]
+Stores and handles routing. Passes the appData and route to the UI. Currently, variables from urls are supported on the second position, and they should defined before any solid urls that could match. Upon expanding the app, this is a great point to improve upon.
+
+##### init ()
+Actually doesn't do anything right now. Possibly a good place to call the defined routes instead of receiving them from the appData.
+##### catchLinks (appData)
+Adds a click handler for every link element in the page. Will prevent browsers from following internal links.
+##### go (appData)
+Tries to get the correct route from the list of available routes. Currently, also fetches variables from the url.
+##### noRoute ()
+404-handler
+##### add (route, handler, template, menu)
+Adds a new Route in the router.
+handler: see Route
+template: see Route
+menu: Menu label, if present add item to main navigation [string] (optional)
+##### parseLocation (path)
+path: url path to be parsed into route array [string]
+##### compareRoute (route, path) 
+TODO: change naming for convention
+Compares 2 routes, is aware of variables in the url
 
 #### settings
 ##### Constructor ()

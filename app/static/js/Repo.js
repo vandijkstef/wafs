@@ -35,7 +35,35 @@ class Repo {
 	}
 
 	// Extention methods
-	// This will probably even update in the appData (if we call this on the item that is placed there)
+	getAllForks(refresh, callback) {
+		if (!this.forks || refresh) {
+			this.forks = [];
+			const gitAPI = new GitAPI();
+			gitAPI.callPromise(this.appData, this.urls.forks)
+				.then((data) => {
+					data.forEach((forkData) => {
+						const fork = {
+							owner: forkData.owner.login,
+							urls: {
+								contributors: forkData.contributors_url
+							}
+						};
+						if (settings.debug) {
+							fork._forkData = forkData;
+						}
+						this.forks.push(fork);
+					});
+					return callback(this.forks);
+				})
+				.catch(() => {
+					debug.warn('Repo: getAllForks: callPromise: catch()');
+				});
+			// gitAPI.callCallBack()
+		} else {
+			return callback(this.forks);
+		}
+	}
+	
 	countAllCommits(refresh, callback) {
 		if (!this.totalAllCommits || refresh) {
 			// const gitAPI = new GitAPI();
@@ -66,34 +94,6 @@ class Repo {
 		// console.log(appData);
 	}
 
-	getAllForks(refresh, callback) {
-		if (!this.forks || refresh) {
-			this.forks = [];
-			const gitAPI = new GitAPI();
-			gitAPI.callPromise(this.appData, this.urls.forks)
-				.then((data) => {
-					data.forEach((forkData) => {
-						const fork = {
-							owner: forkData.owner.login,
-							urls: {
-								contributors: forkData.contributors_url
-							}
-						};
-						if (settings.debug) {
-							fork._forkData = forkData;
-						}
-						this.forks.push(fork);
-					});
-					return callback(this.forks);
-				})
-				.catch(() => {
-					debug.warn('Repo: getAllForks: callPromise: catch()');
-				});
-			// gitAPI.callCallBack()
-		} else {
-			return callback(this.forks);
-		}
-	}
 }
 
 export default Repo;

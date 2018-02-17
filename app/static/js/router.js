@@ -54,7 +54,7 @@ const router = {
 			route.handler(vars);
 			console.log('Am I done with handler?');
 			UI.render(appData, route);
-			this.catchLinks(appData);
+			this.catchLinks(appData); // Wouldn't this make more sense in UI?
 		} else {
 			this.noRoute();
 		}
@@ -62,7 +62,7 @@ const router = {
 	// 404
 	noRoute: function() {
 		// Render 404 page
-		console.warn(404);
+		debug.warn(404);
 	},
 	// Helpers
 	// Add new route to the router
