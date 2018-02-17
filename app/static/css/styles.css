@@ -74,3 +74,7 @@ footer {
 #logCounter {
   display: flex;
 }
+
+#logCounter p {
+  white-space: pre;
+}

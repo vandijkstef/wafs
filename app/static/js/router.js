@@ -75,16 +75,16 @@ const router = {
 		}
 	},
 	// Splits the URL, returns the path as an array
-	parseLocation(pathname) {
-		let path = [];
-		pathname = pathname.split('/');
+	parseLocation(path) {
+		let route = [];
+		path = path.split('/');
 		// Clear empty elements
-		pathname.forEach(function(p) {
+		path.forEach(function(p) {
 			if (p.length > 0) {
-				path.push(p);
+				route.push(p);
 			}
 		});
-		return path;
+		return route;
 	},
 	compareRoute: function(route, path) {
 		if (route.length === path.length) {

@@ -80,5 +80,8 @@ footer {
 // Detail stuff
 
 #logCounter {
-    display: flex;
+	display: flex;
+	p {
+		white-space: pre;
+	}
 }

@@ -1,4 +1,4 @@
-import UItools from './vandy.js';
+import UItools from './UItools.js';
 import debug from './debug.js';
 
 // So.. UI
@@ -18,6 +18,11 @@ import debug from './debug.js';
 // Thus, every route should create a section (upon fetching that route?)
 // If we store this in the router.Route, we can pass the Route to the UI class together with the full appData
 // Thus, we can define our templates within the Route?
+
+
+
+// If every element has a connection to the datapiece
+// How easily can I compare and/or update that on the UI?
 
 const UI = {
 	_: {
@@ -60,27 +65,37 @@ const UI = {
 	},
 	renderNav: function() {
 		debug.log('UI: renderNav');
-		this._.nav.element.appendChild(UItools.getLinkList(this._.nav.data));
+		const listItems = [];
+		this._.nav.data.forEach((item) => {
+			listItems.push(UItools.getLinkListItem(item.name, item.path));
+		});
+		const list = UItools.getList(listItems);
+		UItools.render(list, this._.nav.element);
 	},
 	setApiCalls: function(calls) {
 		if (!this._.footer.logCounter) {
-			this._.footer.logCounter = UItools.renderDiv([UItools.getText('API Calls:'), UItools.getText(calls)], this._.footer.element, null, 'logCounter').querySelector('p+p');
+			const content = [UItools.getText('API Calls: '), UItools.getText('0')];
+			const logCounter = UItools.renderIn(content, document.querySelector('footer'), '', 'logCounter');
+			this._.footer.logCounter = logCounter.querySelector('p+p');
 		}
 		if (calls.toString() !== this._.footer.logCounter.innerHTML) {
 			this._.footer.logCounter.innerHTML = calls;
 		}
 	},
 	renderRepoList: function(appData) {
+		// TODO: This should be rendered from a template? Or are we ok calling this from a template?
+		this.clearMain();
+		const repos = [];
 		appData.git.repos.forEach((repo) => {
-			UItools.renderDiv(`<a href="/repo/${repo.name}">${repo.name}</a>`, this._.main.element, 'repos', repo.name);
+			repos.push(UItools.getLink(repo.name, `/repo/${repo.name}`));
 		});
+		UItools.renderIn(repos, this._.main.element);
 	},
 	clearMain: function() {
 		this._.main.element.innerHTML = '';
 	},
 	createSection: function(route) {
-		// UItools.renderDiv()
-		route.section = UItools.renderDiv('text', this._.main.element, null, route.route);
+		// TODO: 
 		console.log(route);
 	}
 
