@@ -144,21 +144,40 @@ path: url path to be parsed into route array [string]
 TODO: change naming for convention
 Compares 2 routes, is aware of variables in the url
 
-#### settings
-##### Constructor ()
----
+#### settings (settings.js) [object]
+Stores app settings. Client settings should be stored in localStorage
 
-#### tools
-##### Constructor ():
----
+#### tools (tools.js) [object]
+##### testDuplicateNamedObjectArray (needle, stack, key)
+Tests if an object with property exsist in the stack. Returns the object in the stack if found. (TODO: Can I do this with .find()?)
+needle: The new/searched object [object]
+stack: The array of (similar)objects to search in [array[object]]
+key: Property key in object to search for. Defaults to 'name' [string]
 
-#### UI
-##### Constructor ():
----
+#### UI (UI.js) [object]
+*UI if fancy, so we go fancy on our naming conventions.*
+TODO: Try to find a general way to update stuff - possibly after rework of UITools
+Handles the UI and stores data about it.
+_: Data storage, stores non-appData data and the main DOM elements 
+##### init ()
+Fetches the main elements and renders the navigation
+##### render (appData, route)
+Renders the page using the template in the route.
+##### addNav (name, path)
+Adds a menu item object in the data store
+name: See "router.add() menu"
+##### renderNav ()
+Renders the navigation based on the data
+##### setApiCalls (calls)
+Updates the front end API call counter
+calls: The number you wish to display [int | string]
+##### clearMain ()
+Helper function to destroy all content in main
+##### createSection (route)
+Create a section for a specific route (TODO: Is this aware of var urls?)
 
 #### UItools
-##### Constructor ():
----
+A bunch of functions to create DOM elements. Currently not in good shape, needs complete rework
 
 
 ### Flow
@@ -188,3 +207,4 @@ I like lists
 - [ ] PWA / Webworker (extra)
 - [ ] Code Review uitvoeren via GitHub (vrijdag)
 - [ ] Expand router (see notes 12-2)
+- [ ] Update title(description?) dynamically
