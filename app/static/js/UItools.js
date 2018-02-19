@@ -1,3 +1,5 @@
+import debug from './debug.js';
+
 const UItools = {
 	////////////// BASE //////////////
 	// Create a new DOM element and attach the classes/id's
@@ -56,7 +58,9 @@ const UItools = {
 	getList: function(listItems, classes, id, type = 'ul') {
 		var element = this.createElement(classes, id, type);
 		listItems.forEach((listItem) => {
-			// TODO: Allow array of strings as well
+			if (typeof listItem === 'string') {
+				listItem = this.getListItem(listItem);
+			}
 			element.appendChild(listItem);
 		});
 		return element;
@@ -74,7 +78,6 @@ const UItools = {
 		element.appendChild(linkElement);
 		return element;
 	},
-	// getDiv: function(classes, id) == createElement
 	///////////// RENDER /////////////
 	// Render in container
 	render: function(content, container) {
@@ -85,19 +88,26 @@ const UItools = {
 	// Render in a wrapper (block)
 	// uses render
 	// TODO: Wrap method that doesn't render
-	renderIn(content, container, classes, id, elementName = 'div') {
+	renderIn: function(content, container, classes, id, elementName = 'div') {
+		if (!container) {
+			debug.warn('No container/target');
+		}
 		var element = this.createElement(classes, id, elementName);
-		// TODO: Support content as array
 		content = this.forceArray(content);
-		content.forEach(function(item) {
+		content.forEach((item) => {
+			if (typeof item === 'string') {
+				item = this.getText(item);
+			}
 			element.appendChild(item);
 		});
-		return this.render(element, container); // returns element
+		return this.render(element, container);
 	},
 	// Render in an inline element
 	// Uses renderDiv
 	renderText: function(text, container, classes, id, type = 'p') {
-		// TODO: Accept either string as text for a simple P element, or a getText object
+		if (typeof text === 'string') {
+			text = this.getText(text);
+		}
 		return this.renderIn(text, container, classes, id, type);
 	},
 

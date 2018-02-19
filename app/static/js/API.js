@@ -15,6 +15,7 @@ class API {
 		API.setRequestHeader('Content-Type', 'application/json');
 		API.onload = function() {
 			appData.apiCalls++;
+			console.log('callback call made', settings.tokens.git);
 			if (API.status === 200) {
 				return callback(JSON.parse(API.responseText));
 			} else {
@@ -33,6 +34,7 @@ class API {
 			API.setRequestHeader('Content-Type', 'application/json');
 			API.onload = function() {
 				appData.apiCalls++;
+				console.log('promise call made');
 				if (API.status === 200) {
 					resolve(JSON.parse(API.responseText));
 				} else {

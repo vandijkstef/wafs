@@ -1,17 +1,33 @@
 import debug from './debug.js';
 import Route from './Route.js';
 import UI from './UI.js';
+import routes from './routes.js';
 
 const router = {
 	routes: [],
-	init() {
+	init(appData) {
 		debug.log('Router: Init');
+		// Catch browser back/forward
+		window.addEventListener('popstate', function() {
+			router.go(appData);
+		});
+		// Prepare all routes
+		this.getRoutes();
+		// Prepare the UI based on the available routes
+		UI.init();
+		// And try to render the page
+		router.go(appData);
+
+	},
+	getRoutes: function() {
+		routes.map(route => {
+			this.add(route);
+		});
 	},
 	catchLinks: function(appData) {
 		// Disable functionality of all A elements...
 		document.querySelectorAll('a').forEach(function(a) {
 			a.addEventListener('click', function(e) {
-				console.log('trying');
 				e.preventDefault(); // Must be last line
 				try {
 					// Try to update the URL, this will fail on external links
@@ -21,7 +37,6 @@ const router = {
 					// Probably an external url, dont prevent following the link
 					debug.log('External URL', error);
 				} finally {
-					console.log('pushing state');
 					router.go(appData);
 				}
 				return false;
@@ -38,7 +53,6 @@ const router = {
 			if (route) {
 				break;
 			}
-			// console.log(this.routes[i].route);
 			if (this.compareRoute(this.routes[i].route, page)) {
 				debug.log('Router: Assigning: ' + this.routes[i].route);
 				route = this.routes[i];
@@ -51,10 +65,12 @@ const router = {
 			}
 		}
 		if (route) {
-			route.handler(vars);
-			console.log('Am I done with handler?');
-			UI.render(appData, route);
-			this.catchLinks(appData); // Wouldn't this make more sense in UI?
+			route.handler(appData, vars, ()=>{
+				debug.log('Router: Handler done: Rendering');
+				UI.render(appData, route);
+				this.catchLinks(appData); // Are we stacking eventlisteners?
+				// Pretty sure we don't want to move this into UI since it will require us to pass the router into the UI
+			});
 		} else {
 			this.noRoute();
 		}
@@ -66,12 +82,11 @@ const router = {
 	},
 	// Helpers
 	// Add new route to the router
-	add: function(route, handler, template, menu) {
-		debug.log('Router: Add: ' + route);
-		// TODO: Test route validity? -> Do we wanna pass in the route as an array? Or make it optional?
-		this.routes.push(new Route(this.parseLocation(route), handler, template));
-		if (menu) {
-			UI.addNav(menu, route);
+	add: function(route) {
+		const newRoute = new Route(route.id, this.parseLocation(route.path), route.handler, route.template);
+		this.routes.push(newRoute);
+		if (route.menu) {
+			UI.addNav(route.menu, route.path);
 		}
 	},
 	// Splits the URL, returns the path as an array
@@ -87,6 +102,8 @@ const router = {
 		return route;
 	},
 	compareRoute: function(route, path) {
+		// TODO: Try to use filter to fetch a first batch of items
+		// Maybe filter again? Try variable/solid urls?
 		if (route.length === path.length) {
 			for (let i = 0; i < route.length; i++) {
 				if (route[i] !== path[i]) {

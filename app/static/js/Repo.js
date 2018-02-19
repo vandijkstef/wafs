@@ -63,7 +63,7 @@ class Repo {
 			return callback(this.forks);
 		}
 	}
-	
+	// TODO: Is this doing fine within the Repo class? Or is this fitting better in the GitAPI?
 	countAllCommits(refresh, callback) {
 		if (!this.totalAllCommits || refresh) {
 			// const gitAPI = new GitAPI();

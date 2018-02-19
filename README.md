@@ -177,7 +177,7 @@ Helper function to destroy all content in main
 Create a section for a specific route (TODO: Is this aware of var urls?)
 
 #### UItools
-A bunch of functions to create DOM elements. Currently not in good shape, needs complete rework
+A bunch of functions to create DOM elements. Reworked, needs docs
 
 
 ### Flow
@@ -204,6 +204,7 @@ Lets try some different templating methods using a basic list for the repos incl
 
 ## Planning/Todo
 I like lists
+- [ ] Model uittekenen
 - [ ] Update title(description?) dynamically
 - [ ] Expand research on single page apps
 - [ ] PWA / Webworker (extra)

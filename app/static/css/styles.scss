@@ -67,10 +67,21 @@ nav, footer {
 main {
     min-height: 100vh;
     // I want sections here!
-    & > div {
-        max-width: 40em;
-        margin: 0 auto;
-    }
+    section > * {
+		margin: 1em auto;
+		max-width: 45rem;
+		display: block;
+	}
+	section > div {
+		background-color: $white;
+		padding: 1em;
+		border-radius: .2em;
+		color: $brown;
+		a {
+			color: $brown;
+		}
+
+	}
 }
 
 footer {

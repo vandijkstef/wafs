@@ -9,17 +9,7 @@ import debug from './debug.js';
 // Optionally, I want to upgrade this system into using a "virtual DOM", much like react does
 
 // So, stating the above
-// TODO: Create section stuff
 // TODO: Do some test to see if we can update stuff instead of re-rendering
-
-
-
-// We have routes that should correspond to sections
-// Thus, every route should create a section (upon fetching that route?)
-// If we store this in the router.Route, we can pass the Route to the UI class together with the full appData
-// Thus, we can define our templates within the Route?
-
-
 
 // If every element has a connection to the datapiece
 // How easily can I compare and/or update that on the UI?
@@ -30,7 +20,7 @@ const UI = {
 			data: [] // Do I want to keep data in here? Or do I only wanna do this for the nav?
 		},
 		main: {
-			sections: [] // Guess Ill never use this?
+			//sections: [] // Guess Ill never use this?
 		},
 		footer: {
 		}
@@ -53,8 +43,8 @@ const UI = {
 			this.createSection(route);
 		}
 		debug.log('UI: Render');
-		// appData.git.organisation = 'test';
-		console.log(route.template(appData));
+		route.template(appData, route);
+		this.toggleSection(route);
 	},
 	addNav: function(name, path) {
 		const menuItem = {
@@ -82,21 +72,21 @@ const UI = {
 			this._.footer.logCounter.innerHTML = calls;
 		}
 	},
-	renderRepoList: function(appData) {
-		// TODO: This should be rendered from a template? Or are we ok calling this from a template?
-		this.clearMain();
-		const repos = [];
-		appData.git.repos.forEach((repo) => {
-			repos.push(UItools.getLink(repo.name, `/repo/${repo.name}`));
-		});
-		UItools.renderIn(repos, this._.main.element);
-	},
 	clearMain: function() {
 		this._.main.element.innerHTML = '';
 	},
 	createSection: function(route) {
-		// TODO: 
-		console.log(route);
+		route.section = UItools.renderIn('', this._.main.element, '', route.id, 'section');
+	},
+	toggleSection: function(newActiveRoute) {
+		const sections = document.querySelectorAll('main > section');
+		sections.forEach((section) => {
+			if (newActiveRoute.id == section.id) {
+				section.classList.remove('hidden');
+			} else {
+				section.classList.add('hidden');
+			}
+		});
 	}
 
 };

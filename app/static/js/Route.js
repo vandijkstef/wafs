@@ -1,5 +1,6 @@
 class Route {
-	constructor(route, handler, template) {
+	constructor(id, route, handler, template) {
+		this.id = id;
 		this.route = route;
 		this.handler = handler;
 		this.template = template;
