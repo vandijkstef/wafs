@@ -3,14 +3,15 @@ import appDataHelper from './appDataHelper.js';
 import router from './router.js';
 import settings from './settings.js';
 
-import AppData from './AppData.js';
+// import AppData from './AppData.js';
 import Repo from './Repo.js';
 import GitAPI from './GitAPI.js';
 
-import UI from './UI.js';
+import UI from './UI.js'; // TODO: Move to router
 
 {
-	let appData = new AppData();
+	// let appData = new AppData();
+	let appData = appDataHelper.fetch();
 	
 	// App
 	class App {
@@ -25,7 +26,7 @@ import UI from './UI.js';
 		// Called by constructor
 		init() {
 			debug.log('App: Init');
-			appData = appDataHelper.fetch();
+			// appData = appDataHelper.fetch();
 			router.init();
 
 			// TODO: Move the routing definition outside of this file

@@ -194,17 +194,19 @@ Redone the basic structure for the new API app. Created API Class, fetched some 
 Expanded the app into multiple api calls (backend), implemented a promise version of the API call. Worked a long time on having the right data on the appdata. Had to do API auth to increase limit to 5000/hr instead of 60/hr. Reworked the complete app into modules.
 
 ### Friday 16-2-2018
-Spend a lot of time on figuring out how I want to do templating. Layed some basics and hopefully found a pattern that is suiting for my requirements. Also fixed some bugs regarding persistantce/caching and modularity of the system.
+Spend a lot of time on figuring out how I want to do templating. Layed some basics and hopefully found a pattern that is suiting for my requirements. Reviewed Zekkie. Also fixed some bugs regarding persistantce/caching and modularity of the system.
 
+### Saturday 17-2-2018
+Did some work on docs and reworked my UI toolkit to be more flexible.
 
 ### ...
 Lets try some different templating methods using a basic list for the repos including the count of all commits
 
 ## Planning/Todo
 I like lists
-- [ ] Expand research on single page apps
-- [ ] Create folder structure that supports biased/unbiased files
-- [ ] PWA / Webworker (extra)
-- [ ] Code Review uitvoeren via GitHub (vrijdag)
-- [ ] Expand router (see notes 12-2)
 - [ ] Update title(description?) dynamically
+- [ ] Expand research on single page apps
+- [ ] PWA / Webworker (extra)
+
+- [ ] Expand router (see notes 12-2)
+- [ ] Create folder structure that supports biased/unbiased files
