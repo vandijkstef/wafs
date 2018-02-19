@@ -199,6 +199,10 @@ Spend a lot of time on figuring out how I want to do templating. Layed some basi
 ### Saturday 17-2-2018
 Did some work on docs and reworked my UI toolkit to be more flexible.
 
+### Monday 19-2-2018
+Refactored the code, seperated the routes and all their logic from the app. 
+
+
 ### ...
 Lets try some different templating methods using a basic list for the repos including the count of all commits
 
