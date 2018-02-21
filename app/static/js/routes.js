@@ -32,7 +32,9 @@ const _repos = {
 		});		
 	},
 	template: (appData, route) => {
+		// Title
 		UItools.render(UItools.getText(`Organisation: ${appData.git.organisation}`, '', '', 'h1'), route.section);
+		// Repos
 		appData.git.repos.forEach((repo) => {
 			UItools.renderIn(UItools.getLink(repo.name, `/repo/${repo.name}`), route.section);
 		});

@@ -177,7 +177,13 @@ Helper function to destroy all content in main
 Create a section for a specific route (TODO: Is this aware of var urls?)
 
 #### UItools
-A bunch of functions to create DOM elements. Reworked, needs docs
+Creates (TODO: and/or updates) the DOM. Functional style templating.  
+General variables:
+* classes: A string or array of classes to add to the newly created object
+* id: A string to set the id of a newly created object
+* element: A DOM element
+* elementName: Use this to override the default element. Note that additional helper functions are prefered.
+##### 
 
 
 ### Flow

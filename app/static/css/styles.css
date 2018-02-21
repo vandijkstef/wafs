@@ -33,6 +33,7 @@ nav, footer {
   background-color: #ffc636;
   margin: 0;
   color: #474143;
+  animation: fadeIn 0.2s;
 }
 
 nav ul, footer ul {
@@ -89,4 +90,13 @@ footer {
 
 #logCounter p {
   white-space: pre;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
 }

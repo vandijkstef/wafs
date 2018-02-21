@@ -36,6 +36,7 @@ const UItools = {
 		return element;
 	},
 	////////// BASE HELPERS //////////
+	// Make sure the value is parsed into an array
 	forceArray: function(value) {
 		if (!Array.isArray(value)) {
 			value = [value];
@@ -68,6 +69,8 @@ const UItools = {
 	// Create list item
 	getListItem: function(text, classes, id) {
 		var element = this.createElement(classes, id, 'li');
+		// TODO: Make sure to accept either string or elements
+		// Possibly use naming conventing "content"
 		element.innerText = text;
 		return element;
 	},
@@ -85,13 +88,8 @@ const UItools = {
 		container.appendChild(content);
 		return content;
 	},
-	// Render in a wrapper (block)
-	// uses render
-	// TODO: Wrap method that doesn't render
-	renderIn: function(content, container, classes, id, elementName = 'div') {
-		if (!container) {
-			debug.warn('No container/target');
-		}
+	// Wrap some content in new element
+	wrap: function(content, classes, id, elementName = 'div') {
 		var element = this.createElement(classes, id, elementName);
 		content = this.forceArray(content);
 		content.forEach((item) => {
@@ -100,7 +98,16 @@ const UItools = {
 			}
 			element.appendChild(item);
 		});
-		return this.render(element, container);
+		return element;
+	},
+	// Render in a wrapper (block)
+	// uses render
+	renderIn: function(content, container, classes, id, elementName = 'div') {
+		if (!container) {
+			debug.warn('No container/target, use wrap instead()');
+		} else {
+			return this.render(this.wrap(content, classes, id, elementName), container);
+		}
 	},
 	// Render in an inline element
 	// Uses renderDiv
