@@ -17,14 +17,12 @@ class Repo {
 		} else {
 			if (persistant) {
 				Object.assign(this, data);
-				this.flow.persistant = true;
 			} else {
 				if (settings.debug) {
 					// If debug, store the complete gitData with it
 					// Do not use this within the app!
 					this._gitData = data;
 				}
-				this.flow.new = true;
 				this.name = data.name;
 				this.urls = {
 					forks: data.forks_url
