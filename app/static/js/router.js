@@ -17,7 +17,6 @@ const router = {
 		UI.init();
 		// And try to render the page
 		router.go(appData);
-
 	},
 	getRoutes: function() {
 		routes.map(route => {

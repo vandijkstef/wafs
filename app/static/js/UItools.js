@@ -4,6 +4,7 @@ const UItools = {
 	////////////// BASE //////////////
 	// Create a new DOM element and attach the classes/id's
 	createElement: function(classes, id, elementName = 'div') {
+		// console.log(classes, id, elementName);
 		let element = document.createElement(elementName);
 		if (id) {
 			element.id = id;
@@ -38,6 +39,12 @@ const UItools = {
 	////////// BASE HELPERS //////////
 	// Make sure the value is parsed into an array
 	forceArray: function(value) {
+		console.log(value);
+		if (value) {
+			console.log('got value');
+		} else {
+			console.log('me damn empty');
+		}
 		if (!Array.isArray(value)) {
 			value = [value];
 		}
@@ -103,6 +110,9 @@ const UItools = {
 	// Render in a wrapper (block)
 	// uses render
 	renderIn: function(content, container, classes, id, elementName = 'div') {
+		if (!content) {
+			console.log('I has no content bruh');
+		}
 		if (!container) {
 			debug.warn('No container/target, use wrap instead()');
 		} else {

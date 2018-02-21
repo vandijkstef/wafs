@@ -100,3 +100,8 @@ footer {
     opacity: 1;
   }
 }
+
+/* Remove IP address (personal plugin) */
+#tqShowIP {
+  display: none;
+}

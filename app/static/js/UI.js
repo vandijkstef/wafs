@@ -41,6 +41,8 @@ const UI = {
 	render: function(appData, route) {
 		if (!route.section) {
 			this.createSection(route);
+		} else {
+			this.clearSection(route.section);
 		}
 		debug.log('UI: Render');
 		route.template(appData, route);
@@ -75,8 +77,12 @@ const UI = {
 	clearMain: function() {
 		this._.main.element.innerHTML = '';
 	},
+	clearSection: function(section) {
+		section.innerHTML = '';
+	},
 	createSection: function(route) {
-		route.section = UItools.renderIn('', this._.main.element, '', route.id, 'section');
+		route.section = UItools.render(UItools.createElement('', route.id, 'section'), this._.main.element);
+		console.log(3, route.section);
 	},
 	toggleSection: function(newActiveRoute) {
 		const sections = document.querySelectorAll('main > section');

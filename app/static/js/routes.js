@@ -1,5 +1,4 @@
 import settings from './settings.js';
-
 import Repo from './Repo.js';
 import UItools from './UItools.js';
 import GitAPI from './GitAPI.js';
@@ -11,8 +10,11 @@ const _home = {
 		console.log('Route handler');
 		callback();
 	},
-	template: (appData) => {
-		return `template ${appData.git.organisation}`;
+	template: (appData, route) => {
+		const content = [];
+		content.push(UItools.getText(`Github organisation explorer`, '', '', 'h1'));
+		content.push(UItools.getText(`Discover irrelevant meta data on the repositories of an organisation.`));
+		UItools.renderIn(content, route.section);
 	},
 	menu: 'Home' 
 };
