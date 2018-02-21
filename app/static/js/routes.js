@@ -1,6 +1,4 @@
 import settings from './settings.js';
-// import Repo from './Repo.js';
-
 import UItools from './UItools.js';
 import GitAPI from './GitAPI.js';
 
@@ -10,36 +8,29 @@ const _home = {
 	id: 'home',
 	path: '/',
 	handler: (appData, vars, callback) => {
-		console.log('Route handler');
 		callback();
 	},
 	template: (appData, route) => {
 		const content = [];
 		content.push(UItools.getText(`Github organisation explorer`, '', '', 'h1'));
-		content.push(UItools.getText(`Discover irrelevant meta data on the repositories of an organisation.`));
+		content.push(UItools.getText(`Discover irrelevant metadata on the repositories of an organisation.`));
 		UItools.renderIn(content, route.section);
 	},
-	menu: 'Home' 
+	menu: 'Home'
 };
 
 const _repos = {
 	id: 'repos',
 	path: '/repo',
 	handler: (appData, vars, callback) => {
-		// const gitAPI = new GitAPI();
-		// Possibly move this into GitAPI as GetReposFromOrg(organisation)
-		// gitAPI.callCallback(appData, '/orgs/' + settings.organisation + '/repos', function(data) { 
-		// 	data.forEach((repo) => { 
-		// 		new Repo(appData, repo);
-		// 		console.log(1234, appData);
-		// 	});
-		// 	callback();
-		// });
 		gitAPI.GetReposFromOrg(appData, settings.organisation, function() {
-			console.log(123, appData);
-			callback();
+			appData.git.repos.forEach((repo) => {
+				repo.countAllCommits(false, () => {
+					console.log(2, repo);
+					callback();
+				});
+			});
 		});
-
 	},
 	template: (appData, route) => {
 		// Title

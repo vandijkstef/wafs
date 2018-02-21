@@ -1,10 +1,6 @@
 import debug from './debug.js';
 import appDataHelper from './appDataHelper.js';
 import router from './router.js';
-// import settings from './settings.js';
-// import AppData from './AppData.js';
-// import Repo from './Repo.js';
-// import GitAPI from './GitAPI.js';
 
 import UI from './UI.js'; // TODO: Move to router
 

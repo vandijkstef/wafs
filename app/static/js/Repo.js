@@ -51,47 +51,62 @@ class Repo {
 						}
 						this.forks.push(fork);
 					});
-					return callback(this.forks);
+					console.log('got all forks');
+					return callback();
 				})
 				.catch(() => {
 					debug.warn('Repo: getAllForks: callPromise: catch()');
 				});
-			// gitAPI.callCallBack()
 		} else {
-			return callback(this.forks);
+			return callback();
 		}
 	}
-	// TODO: Is this doing fine within the Repo class? Or is this fitting better in the GitAPI?
+	// TODO: Is this doing fine within the Repo class? Or is this fitting better in the GitAPI? -> it is...
 	countAllCommits(refresh, callback) {
 		if (!this.totalAllCommits || refresh) {
+			const gitAPI = new GitAPI();
 			// const gitAPI = new GitAPI();
+			let fetched = 0;
 			this.getAllForks(refresh, () => {
 				// Get contributors per fork
-				this.forks.forEach((fork) => {
-					this.gitAPI.callPromise(this.appData, fork.urls.contributors)
+				this.forks.forEach((fork, i, forks) => {
+					gitAPI.callPromise(this.appData, fork.urls.contributors)
 						.then((data) => {
+							fetched++;
 							fork.contribData = data;
-							data.forEach(function(data) {
-								data.iDidIt = true;
+							const ownerContributions = fork.contribData.filter((data) => {
+								return data.login === fork.owner;
 							});
-							// console.log(20, data);
-							// console.log('im done with this');
-							// TODO: HERE
-
+							fork.ownerContributions = ownerContributions[0];
+							if (fetched === forks.length) {
+								let count = this.forks.reduce((total, fork) => {
+									// TODO: HALP -> ASYNC STUFF BREAKING MY HEAD HERE
+									console.log(this.name, 'add', fork.ownerContributions);
+									// console.log(this.name, total);
+									return total + fork.ownerContributions.contributions;
+								},0);
+								// console.log(785934534897, count);
+								callback();
+							}
 						})
-						.catch(() => {
+						.catch((err) => {
+							console.log(err);
 							debug.warn('Repo: countAllCommits: callPromise: catch()');
 						});
 				});
-				this.totalAllCommits = 5;
-				return callback(this);
+				// console.log(234, this.forks.reduce((total, fork) => {
+				// 	console.log(9876, fork.ownerContributions);
+				// 	// return total + fork.ownerContributions.contributions;
+				// }));
+				// this.totalAllCommits = 5;
+				// TODO: This needs to wait untill above loop is completed
+				// console.log('No doing anymo plox');
+				// return callback(this);
 			});
 		} else {
 			return callback(this);
 		}
-		// console.log(appData);
 	}
-
 }
 
 export default Repo;

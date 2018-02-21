@@ -5,7 +5,7 @@ $white: rgb(230, 230, 230);
 $orange: rgb(255, 99, 68);
 $trans: .2s;
 
-// Common
+/* Common */
 * {
     box-sizing: border-box;
 }
@@ -27,7 +27,7 @@ a {
     }
 }
 
-// Main items
+/* Main items */
 body {
     font-family: Ubuntu, Calibri, Arial, Helvetica, sans-serif;
     background-color: $brown;
@@ -67,7 +67,6 @@ nav, footer {
 
 main {
     min-height: 100vh;
-    // I want sections here!
     section > * {
 		margin: 1em auto;
 		max-width: 45rem;
@@ -89,8 +88,7 @@ footer {
     padding: 1em 1.5em .4em;
 }
 
-// Detail stuff
-
+/* Detail stuff */
 #logCounter {
 	display: flex;
 	p {
@@ -98,7 +96,7 @@ footer {
 	}
 }
 
-// Animations
+/* Animations */
 @keyframes fadeIn { // From Animate.css
 	0% {
 	  opacity: 0;

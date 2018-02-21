@@ -25,22 +25,24 @@ const router = {
 	},
 	catchLinks: function(appData) {
 		// Disable functionality of all A elements...
-		document.querySelectorAll('a').forEach(function(a) {
-			a.addEventListener('click', function(e) {
-				e.preventDefault(); // Must be last line
-				try {
-					// Try to update the URL, this will fail on external links
-					history.pushState(null, null, e.target.href);
-					// If this didn't fail, we are still here
-				} catch(error) {
-					// Probably an external url, dont prevent following the link
-					debug.log('External URL', error);
-				} finally {
-					router.go(appData);
-				}
-				return false;
-			});
+		document.querySelectorAll('a').forEach((a) => {
+			a.appData = appData;
+			a.addEventListener('click', this.catch);
 		});
+	},
+	catch: function(e) {
+		try {
+			// Try to update the URL, this will fail on external links
+			history.pushState(null, null, e.target.href);
+			// If this didn't fail, we are still here
+			e.preventDefault(); // Must be last line
+		} catch(error) {
+			// Probably an external url, dont prevent following the link
+			debug.log('External URL', error);
+		} finally {
+			router.go(e.target.appData);
+		}
+		return false;
 	},
 	// Go to the current path, the <a> click handler takes care of this
 	go: function(appData) {
@@ -71,12 +73,13 @@ const router = {
 				// Pretty sure we don't want to move this into UI since it will require us to pass the router into the UI
 			});
 		} else {
-			this.noRoute();
+			this.noRoute(appData);
 		}
 	},
 	// 404
 	noRoute: function() {
 		// Render 404 page
+		// UI.render(appData)
 		debug.warn(404);
 	},
 	// Helpers

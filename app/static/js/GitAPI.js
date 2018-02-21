@@ -7,12 +7,15 @@ class GitAPI extends API {
 		super('https://api.github.com');
 	}
 
+	
 	GetReposFromOrg(appData, organisation, callback) {
+		// Theres no cache fallback here, this ain't a heavy call
+		// Note that they are not added again to the AppData if the repo is already there
+		// So, any repo-level changes in the data are not stored
 		this.callPromise(appData, '/orgs/' + organisation + '/repos')
 			.then((data) => {
 				data.forEach((repo) => { 
 					new Repo(appData, repo);
-					console.log(8523, appData);
 				});
 				callback();
 			});

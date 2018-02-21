@@ -82,7 +82,6 @@ const UI = {
 	},
 	createSection: function(route) {
 		route.section = UItools.render(UItools.createElement('', route.id, 'section'), this._.main.element);
-		console.log(3, route.section);
 	},
 	toggleSection: function(newActiveRoute) {
 		const sections = document.querySelectorAll('main > section');
