@@ -51,7 +51,6 @@ class Repo {
 						}
 						this.forks.push(fork);
 					});
-					console.log('got all forks');
 					return callback();
 				})
 				.catch(() => {
@@ -63,7 +62,7 @@ class Repo {
 	}
 	// TODO: Is this doing fine within the Repo class? Or is this fitting better in the GitAPI? -> it is...
 	countAllCommits(refresh, callback) {
-		if (!this.totalAllCommits || refresh) {
+		if (!this.totalCommitsInForks || refresh) {
 			const gitAPI = new GitAPI();
 			// const gitAPI = new GitAPI();
 			let fetched = 0;
@@ -80,12 +79,15 @@ class Repo {
 							fork.ownerContributions = ownerContributions[0];
 							if (fetched === forks.length) {
 								let count = this.forks.reduce((total, fork) => {
-									// TODO: HALP -> ASYNC STUFF BREAKING MY HEAD HERE
-									console.log(this.name, 'add', fork.ownerContributions);
-									// console.log(this.name, total);
+									if (fork.ownerContributions === undefined) {
+										// Some people did fork, but didn't commit. Jerks
+										fork.ownerContributions = {
+											contributions: 0
+										};
+									}
 									return total + fork.ownerContributions.contributions;
-								},0);
-								// console.log(785934534897, count);
+								}, 0);
+								this.totalCommitsInForks = count;
 								callback();
 							}
 						})
@@ -94,17 +96,9 @@ class Repo {
 							debug.warn('Repo: countAllCommits: callPromise: catch()');
 						});
 				});
-				// console.log(234, this.forks.reduce((total, fork) => {
-				// 	console.log(9876, fork.ownerContributions);
-				// 	// return total + fork.ownerContributions.contributions;
-				// }));
-				// this.totalAllCommits = 5;
-				// TODO: This needs to wait untill above loop is completed
-				// console.log('No doing anymo plox');
-				// return callback(this);
 			});
 		} else {
-			return callback(this);
+			return callback();
 		}
 	}
 }

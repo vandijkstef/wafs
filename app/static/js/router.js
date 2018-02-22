@@ -60,15 +60,15 @@ const router = {
 				// Scan the route for variables, add them to the vars object
 				for (let j = 0; j < route.route.length; j++) {
 					if (route.route[j][0] == ':') {
-						vars[route.route[j].replace(':', '')] = page[i];
+						vars[route.route[j].replace(':', '')] = page[j];
 					}
 				}
 			}
 		}
 		if (route) {
-			route.handler(appData, vars, ()=>{
+			route.handler(appData, vars, () => {
 				debug.log('Router: Handler done: Rendering');
-				UI.render(appData, route);
+				UI.render(appData, route, vars);
 				this.catchLinks(appData); // Are we stacking eventlisteners?
 				// Pretty sure we don't want to move this into UI since it will require us to pass the router into the UI
 			});

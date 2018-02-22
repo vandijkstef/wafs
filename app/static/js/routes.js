@@ -37,7 +37,7 @@ const _repos = {
 		UItools.render(UItools.getText(`Organisation: ${appData.git.organisation}`, '', '', 'h1'), route.section);
 		// Repos
 		appData.git.repos.forEach((repo) => {
-			UItools.renderIn(UItools.getLink(repo.name, `/repo/${repo.name}`), route.section);
+			UItools.renderIn([UItools.getLink(repo.name, `/repo/${repo.name}`), UItools.getText(`Commits on forks: ${repo.totalCommitsInForks}`)], route.section);
 		});
 	},
 	menu: 'Repos'
@@ -50,8 +50,13 @@ const _repoDetail = {
 		console.log('Detail repo handler');
 		callback();
 	},
-	template: (appData) => {
-		return `Detail repo template ${appData.git.organisation}`;
+	template: (appData, route, vars) => {
+		const repo = appData.git.repos.find((repo) => {
+			return repo.name === vars.id;
+		});
+		const content = [];
+		content.push(UItools.getText(repo.name, '', '', 'h1'));
+		UItools.renderIn(content, route.section);
 	}
 };
 

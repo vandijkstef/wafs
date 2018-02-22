@@ -38,14 +38,14 @@ const UI = {
 		}
 		this.renderNav();
 	},
-	render: function(appData, route) {
+	render: function(appData, route, vars) {
 		if (!route.section) {
 			this.createSection(route);
 		} else {
 			this.clearSection(route.section);
 		}
 		debug.log('UI: Render');
-		route.template(appData, route);
+		route.template(appData, route, vars);
 		this.toggleSection(route);
 	},
 	addNav: function(name, path) {
