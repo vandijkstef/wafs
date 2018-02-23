@@ -17,14 +17,13 @@ class Repo {
 		} else {
 			if (persistant) {
 				Object.assign(this, data);
-				this.flow.persistant = true;
 			} else {
 				if (settings.debug) {
 					// If debug, store the complete gitData with it
 					// Do not use this within the app!
 					this._gitData = data;
 				}
-				this.flow.new = true;
+				console.log(888, data);
 				this.name = data.name;
 				this.urls = {
 					forks: data.forks_url
@@ -35,37 +34,6 @@ class Repo {
 	}
 
 	// Extention methods
-	// This will probably even update in the appData (if we call this on the item that is placed there)
-	countAllCommits(refresh, callback) {
-		if (!this.totalAllCommits || refresh) {
-			// const gitAPI = new GitAPI();
-			this.getAllForks(refresh, () => {
-				// Get contributors per fork
-				this.forks.forEach((fork) => {
-					this.gitAPI.callPromise(this.appData, fork.urls.contributors)
-						.then((data) => {
-							fork.contribData = data;
-							data.forEach(function(data) {
-								data.iDidIt = true;
-							});
-							// console.log(20, data);
-							// console.log('im done with this');
-							// TODO: HERE
-
-						})
-						.catch(() => {
-							debug.warn('Repo: countAllCommits: callPromise: catch()');
-						});
-				});
-				this.totalAllCommits = 5;
-				return callback(this);
-			});
-		} else {
-			return callback(this);
-		}
-		// console.log(appData);
-	}
-
 	getAllForks(refresh, callback) {
 		if (!this.forks || refresh) {
 			this.forks = [];
@@ -76,7 +44,8 @@ class Repo {
 						const fork = {
 							owner: forkData.owner.login,
 							urls: {
-								contributors: forkData.contributors_url
+								contributors: forkData.contributors_url,
+								html_url: forkData.html_url
 							}
 						};
 						if (settings.debug) {
@@ -84,14 +53,54 @@ class Repo {
 						}
 						this.forks.push(fork);
 					});
-					return callback(this.forks);
+					return callback();
 				})
 				.catch(() => {
 					debug.warn('Repo: getAllForks: callPromise: catch()');
 				});
-			// gitAPI.callCallBack()
 		} else {
-			return callback(this.forks);
+			return callback();
+		}
+	}
+	// TODO: Is this doing fine within the Repo class? Or is this fitting better in the GitAPI?
+	countAllCommits(refresh, callback) {
+		if (!this.totalCommitsInForks || refresh) {
+			const gitAPI = new GitAPI();
+			// const gitAPI = new GitAPI();
+			let fetched = 0;
+			this.getAllForks(refresh, () => {
+				// Get contributors per fork
+				this.forks.forEach((fork, i, forks) => {
+					gitAPI.callPromise(this.appData, fork.urls.contributors)
+						.then((data) => {
+							fetched++;
+							fork.contribData = data;
+							const ownerContributions = fork.contribData.filter((data) => {
+								return data.login === fork.owner;
+							});
+							fork.ownerContributions = ownerContributions[0];
+							if (fetched === forks.length) {
+								let count = this.forks.reduce((total, fork) => {
+									if (fork.ownerContributions === undefined) {
+										// Some people did fork, but didn't commit. Jerks
+										fork.ownerContributions = {
+											contributions: 0
+										};
+									}
+									return total + fork.ownerContributions.contributions;
+								}, 0);
+								this.totalCommitsInForks = count;
+								callback();
+							}
+						})
+						.catch((err) => {
+							console.log(err);
+							debug.warn('Repo: countAllCommits: callPromise: catch()');
+						});
+				});
+			});
+		} else {
+			return callback();
 		}
 	}
 }

@@ -7,11 +7,11 @@ class API {
 		this.server = server;
 	}
 
-	callCallback(appData, path, callback) {
-		debug.log('API: Calling: "' + path + '" on ' + this.server);
+	callCallback(appData, url, callback) {
+		debug.log('API: Calling: "' + url + '" on ' + this.server);
 		const API = new XMLHttpRequest();
-		path = path.replace(this.server, ''); // Git gives full urls, so strip the server from the url
-		API.open('GET', this.server + path + '?access_token=' + settings.tokens.git);
+		url = url.replace(this.server, ''); // Git gives full urls, so strip the server from the url
+		API.open('GET', this.server + url + '?access_token=' + settings.tokens.git);
 		API.setRequestHeader('Content-Type', 'application/json');
 		API.onload = function() {
 			appData.apiCalls++;
@@ -25,11 +25,11 @@ class API {
 	}
 
 	// Yes this function is mainly repeating the above, I will ultimately choose the method that suits me best
-	callPromise(appData, path) {
+	callPromise(appData, url) {
 		const promise = new Promise((resolve, reject) => {
 			const API = new XMLHttpRequest();
-			path = path.replace(this.server, ''); // Git gives full urls, so strip the server from the url
-			API.open('GET', this.server + path + '?access_token=' + settings.tokens.git);
+			url = url.replace(this.server, ''); // Git gives full urls, so strip the server from the url
+			API.open('GET', this.server + url + '?access_token=' + settings.tokens.git + '&per_page=100');
 			API.setRequestHeader('Content-Type', 'application/json');
 			API.onload = function() {
 				appData.apiCalls++;

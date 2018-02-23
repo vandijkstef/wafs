@@ -1,0 +1,10 @@
+# I don't like htaccess, but I dont have (easy) config access to some dev servers
+# Suggested to put these configs in your server config and remove this file
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    RewriteRule ^index\.html$ - [L]
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+</IfModule>

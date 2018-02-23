@@ -1,3 +1,4 @@
+/* Common */
 * {
   box-sizing: border-box;
 }
@@ -20,6 +21,7 @@ a:hover {
   color: #b3b3b3;
 }
 
+/* Main items */
 body {
   font-family: Ubuntu, Calibri, Arial, Helvetica, sans-serif;
   background-color: #474143;
@@ -33,6 +35,7 @@ nav, footer {
   background-color: #ffc636;
   margin: 0;
   color: #474143;
+  animation: fadeIn 0.2s;
 }
 
 nav ul, footer ul {
@@ -59,18 +62,101 @@ nav a:hover, footer a:hover {
 }
 
 main {
-  min-height: 80vh;
+  min-height: 100vh;
 }
 
-main > div {
-  max-width: 40em;
-  margin: 0 auto;
+main section > * {
+  margin: 1em auto;
+  max-width: 45rem;
+  display: block;
+}
+
+main section > div {
+  background-color: #e6e6e6;
+  padding: 1em;
+  border-radius: .2em;
+  color: #474143;
+}
+
+main section > div a {
+  color: #474143;
 }
 
 footer {
   padding: 1em 1.5em .4em;
 }
 
+#load {
+  position: relative;
+  height: 6em;
+  width: 10em;
+  margin: 0 auto;
+}
+
+#load div {
+  position: absolute;
+  bottom: 0;
+  display: block;
+  width: 1em;
+  height: 1em;
+  border-radius: 100%;
+  background: rgba(255, 255, 255, 0.6);
+  margin: 0;
+  animation: jump 1.4s infinite ease-out;
+}
+
+#load div:nth-of-type(1) {
+  left: 0;
+  animation-delay: .2s;
+}
+
+#load div:nth-of-type(2) {
+  left: 2em;
+  animation-delay: .4s;
+}
+
+#load div:nth-of-type(3) {
+  left: 4em;
+  animation-delay: .6s;
+}
+
+#load div:nth-of-type(4) {
+  left: 6em;
+  animation-delay: .8s;
+}
+
+/* Detail stuff */
 #logCounter {
   display: flex;
+}
+
+#logCounter p {
+  white-space: pre;
+}
+
+/* Animations */
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes jump {
+  0% {
+    bottom: 0;
+  }
+  20% {
+    bottom: 4em;
+  }
+  80% {
+    bottom: 0;
+  }
+}
+
+/* Remove IP address (personal plugin) */
+#tqShowIP, #chrome_websiteIP {
+  display: none;
 }

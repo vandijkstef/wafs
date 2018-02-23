@@ -10,9 +10,8 @@ const appDataHelper = {
 			delete repo.appData;
 			delete repo._gitData;
 			delete repo.flow;
-			// TODO: Possibly unset gitAPI as well
 		});
-		debug.log('Storing:', workData);
+		debug.log('appDataHelper: Store', workData);
 		localStorage.setItem('appData', JSON.stringify(workData));
 	},
 	fetch: function() {
