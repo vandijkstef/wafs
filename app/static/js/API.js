@@ -39,6 +39,7 @@ class API {
 					reject('We didn\'t receive 200 status');
 				}
 			};
+			API.onerror = reject();
 			API.send();
 		});
 		return promise;

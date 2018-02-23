@@ -149,14 +149,13 @@ Stores app settings. Client settings should be stored in localStorage
 
 #### tools (tools.js) [object]
 ##### testDuplicateNamedObjectArray (needle, stack, key)
-Tests if an object with property exsist in the stack. Returns the object in the stack if found. (TODO: Can I do this with .find()?)
-needle: The new/searched object [object]
-stack: The array of (similar)objects to search in [array[object]]
+Tests if an object with property exsist in the stack. Returns the object in the stack if found. (TODO: Can I do this with .find()?)  
+needle: The new/searched object [object]  
+stack: The array of (similar)objects to search in [array[object]]  
 key: Property key in object to search for. Defaults to 'name' [string]
 
 #### UI (UI.js) [object]
-*UI if fancy, so we go fancy on our naming conventions.*
-TODO: Try to find a general way to update stuff - possibly after rework of UITools
+*UI if fancy, so we go fancy on our naming conventions.*  
 Handles the UI and stores data about it.
 _: Data storage, stores non-appData data and the main DOM elements 
 ##### init ()
@@ -183,8 +182,6 @@ General variables:
 * id: A string to set the id of a newly created object
 * element: A DOM element
 * elementName: Use this to override the default element. Note that additional helper functions are prefered.
-##### 
-
 
 ### Flow
 ![Flow](/flow.png)
@@ -208,15 +205,9 @@ Did some work on docs and reworked my UI toolkit to be more flexible.
 ### Monday 19-2-2018
 Refactored the code, seperated the routes and all their logic from the app. 
 
-
-### ...
-Lets try some different templating methods using a basic list for the repos including the count of all commits
-
 ## Planning/Todo
 I like lists
-- [ ] Model uittekenen
 - [ ] Update title(description?) dynamically
-- [ ] Expand research on single page apps
 - [ ] PWA / Webworker (extra)
 
 - [ ] Expand router (see notes 12-2)

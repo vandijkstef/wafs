@@ -1,6 +1,7 @@
 import settings from './settings.js';
 import UItools from './UItools.js';
 import GitAPI from './GitAPI.js';
+import debug from './debug.js';
 
 const gitAPI = new GitAPI();
 
@@ -23,17 +24,21 @@ const _repos = {
 	id: 'repos',
 	path: '/repo',
 	handler: (appData, vars, callback) => {
-		gitAPI.GetReposFromOrg(appData, settings.organisation, function() {
-			let count = 0;
-			appData.git.repos.forEach((repo) => {
-				repo.countAllCommits(false, () => {
-					console.log(2, repo);
-					count++;
-					if (count == appData.git.repos.length) {
-						callback();
-					}
+		gitAPI.GetReposFromOrg(appData, settings.organisation, function(status) {
+			if (status === false) {
+				callback(false);
+			} else {
+				let count = 0;
+				appData.git.repos.forEach((repo) => {
+					repo.countAllCommits(false, () => {
+						console.log(2, repo);
+						count++;
+						if (count == appData.git.repos.length) {
+							callback();
+						}
+					});
 				});
-			});
+			}
 		});
 	},
 	template: (appData, route) => {
@@ -54,6 +59,21 @@ const _repoDetail = {
 	handler: (appData, vars, callback) => {
 		console.log('Detail repo handler');
 		callback();
+
+		// TODO: This doesn't work directly
+		// gitAPI.GetReposFromOrg(appData, settings.organisation, function() {
+		// 	let count = 0;
+		// 	// 
+		// 	// appData.git.repos.forEach((repo) => {
+		// 	// 	repo.countAllCommits(false, () => {
+		// 	// 		console.log(2, repo);
+		// 	// 		count++;
+		// 	// 		if (count == appData.git.repos.length) {
+		// 	// 			callback();
+		// 	// 		}
+		// 	// 	});
+		// 	// });
+		// });
 	},
 	template: (appData, route, vars) => {
 		const repo = appData.git.repos.find((repo) => {

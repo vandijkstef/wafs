@@ -67,11 +67,15 @@ const router = {
 			}
 		}
 		if (route) {
-			route.handler(appData, vars, () => {
-				debug.log('Router: Handler done: Rendering');
-				UI.render(appData, route, vars);
-				this.catchLinks(appData); // Are we stacking eventlisteners?
-				// Pretty sure we don't want to move this into UI since it will require us to pass the router into the UI
+			route.handler(appData, vars, (status) => {
+				if (status === false) {
+					UI.error();
+				} else {
+					debug.log('Router: Handler done: Rendering');
+					UI.render(appData, route, vars);
+					this.catchLinks(appData); // Are we stacking eventlisteners?
+					// Pretty sure we don't want to move this into UI since it will require us to pass the router into the UI
+				}
 			});
 		} else {
 			this.noRoute(appData);

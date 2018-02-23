@@ -55,8 +55,10 @@ class Repo {
 					});
 					return callback();
 				})
-				.catch(() => {
+				.catch((err) => {
+					debug.warn(err);
 					debug.warn('Repo: getAllForks: callPromise: catch()');
+					return callback(false);
 				});
 		} else {
 			return callback();
@@ -94,8 +96,9 @@ class Repo {
 							}
 						})
 						.catch((err) => {
-							console.log(err);
+							debug.warn(err);
 							debug.warn('Repo: countAllCommits: callPromise: catch()');
+							return callback(false);
 						});
 				});
 			});

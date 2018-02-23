@@ -41,8 +41,12 @@ const UI = {
 		debug.log('UI: Render');
 		this._.loader.element.classList.add('hidden');
 		appDataHelper.store(appData);
-		route.template(appData, route, vars);
-		this.toggleSection(route);
+		try {
+			route.template(appData, route, vars);
+			this.toggleSection(route);
+		} catch (err) {
+			this.error();
+		}
 	},
 	addNav: function(route) {
 		const menuItem = {
@@ -93,6 +97,9 @@ const UI = {
 	load: function() {
 		this._.loader.element.classList.remove('hidden');
 		this.toggleSection();
+	},
+	error: function() {
+		UItools.renderIn(UItools.getLink('Oops! Something went wrong, click here to reload', '/'), this._.main.element, '', 'error', 'section');
 	}
 
 };
