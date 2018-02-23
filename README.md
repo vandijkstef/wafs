@@ -187,7 +187,7 @@ General variables:
 
 
 ### Flow
----
+![Flow](/flow.png)
 
 ## Process
 ### Wednesday 7-2-2018
