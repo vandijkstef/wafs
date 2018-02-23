@@ -4,7 +4,7 @@ import Repo from './Repo.js';
 class GitAPI extends API {
 	// Just for sake of lolz
 	constructor() {
-		super('https://api.github.dsjof');
+		super('https://api.github.com');
 	}
 
 	
