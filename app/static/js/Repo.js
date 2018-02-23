@@ -23,6 +23,7 @@ class Repo {
 					// Do not use this within the app!
 					this._gitData = data;
 				}
+				console.log(888, data);
 				this.name = data.name;
 				this.urls = {
 					forks: data.forks_url
@@ -43,7 +44,8 @@ class Repo {
 						const fork = {
 							owner: forkData.owner.login,
 							urls: {
-								contributors: forkData.contributors_url
+								contributors: forkData.contributors_url,
+								html_url: forkData.html_url
 							}
 						};
 						if (settings.debug) {
@@ -60,7 +62,7 @@ class Repo {
 			return callback();
 		}
 	}
-	// TODO: Is this doing fine within the Repo class? Or is this fitting better in the GitAPI? -> it is...
+	// TODO: Is this doing fine within the Repo class? Or is this fitting better in the GitAPI?
 	countAllCommits(refresh, callback) {
 		if (!this.totalCommitsInForks || refresh) {
 			const gitAPI = new GitAPI();

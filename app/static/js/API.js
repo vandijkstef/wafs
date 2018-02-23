@@ -29,7 +29,7 @@ class API {
 		const promise = new Promise((resolve, reject) => {
 			const API = new XMLHttpRequest();
 			url = url.replace(this.server, ''); // Git gives full urls, so strip the server from the url
-			API.open('GET', this.server + url + '?access_token=' + settings.tokens.git);
+			API.open('GET', this.server + url + '?access_token=' + settings.tokens.git + '&per_page=100');
 			API.setRequestHeader('Content-Type', 'application/json');
 			API.onload = function() {
 				appData.apiCalls++;

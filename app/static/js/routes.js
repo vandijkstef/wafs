@@ -24,10 +24,14 @@ const _repos = {
 	path: '/repo',
 	handler: (appData, vars, callback) => {
 		gitAPI.GetReposFromOrg(appData, settings.organisation, function() {
+			let count = 0;
 			appData.git.repos.forEach((repo) => {
 				repo.countAllCommits(false, () => {
 					console.log(2, repo);
-					callback();
+					count++;
+					if (count == appData.git.repos.length) {
+						callback();
+					}
 				});
 			});
 		});
@@ -39,6 +43,7 @@ const _repos = {
 		appData.git.repos.forEach((repo) => {
 			UItools.renderIn([UItools.getLink(repo.name, `/repo/${repo.name}`), UItools.getText(`Commits on forks: ${repo.totalCommitsInForks}`)], route.section);
 		});
+		console.log(appData);
 	},
 	menu: 'Repos'
 };
@@ -57,6 +62,14 @@ const _repoDetail = {
 		const content = [];
 		content.push(UItools.getText(repo.name, '', '', 'h1'));
 		UItools.renderIn(content, route.section);
+		repo.forks.sort((fork1, fork2) => {
+			return fork2.ownerContributions.contributions - fork1.ownerContributions.contributions;
+		});
+		const forkList = [];
+		repo.forks.forEach((fork) => {
+			forkList.push(UItools.getLinkListItem(`${fork.owner}: ${fork.ownerContributions.contributions}`, fork.urls.html_url));
+		});
+		UItools.renderIn(UItools.getList(forkList, '', '', 'ol'), route.section);
 	}
 };
 
@@ -66,29 +79,3 @@ const routes = [
 	_repoDetail
 ];
 export default routes;
-
-// Add all routes
-// router.add('/', function() {
-// 	debug.log('eehrm..');
-// }, (appData) => {
-// 	return `template ${appData.git.organisation}`;
-// }, 'Home'); // Possibly need to wrap the template into a function and pass all relevant data into it
-
-// router.add('/repo', function() {
-// 	const gitAPI = new GitAPI();
-// 	// TODO: This should probably be a promise and required to chain .then to get to rendering
-// 	gitAPI.callCallback(appData, '/orgs/' + settings.organisation + '/repos', function(data) {
-// 		data.forEach((repo) => {
-// 			new Repo(appData, repo);
-// 		});
-// 		UI.renderRepoList(appData);
-// 	});
-// }, (appData) => {
-// 	return `template ${appData.git.organisation}`;
-// }, 'Repos');
-
-// router.add('/repo/:var', function(vars) {
-// 	debug.log('reponame', vars.var);
-// }, (appData) => {
-// 	return `template ${appData.git.organisation}`;
-// });

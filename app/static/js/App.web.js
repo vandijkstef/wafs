@@ -13,16 +13,15 @@ import UI from './UI.js'; // TODO: Move to router
 			// Init the system
 			this.init();
 
-
 			//////////////////////
 			// Debug stuff:
 			// Start an infinite loop that shows the amount of calls we make
 			this.logCalls();
 			// Save our data after 5 seconds
 			// This is a lil' hacky, but it saves us API calls during dev
-			setTimeout(() => {
-				appDataHelper.store(this.appData);
-			}, 5000);
+			// setTimeout(() => {
+			// 	appDataHelper.store(this.appData);
+			// }, 5000);
 			//////////////////////
 		}
 		

@@ -46,6 +46,7 @@ const router = {
 	},
 	// Go to the current path, the <a> click handler takes care of this
 	go: function(appData) {
+		UI.load();
 		let route;
 		const vars = {};
 		const page = this.parseLocation(window.location.pathname);
@@ -88,7 +89,7 @@ const router = {
 		const newRoute = new Route(route.id, this.parseLocation(route.path), route.handler, route.template);
 		this.routes.push(newRoute);
 		if (route.menu) {
-			UI.addNav(route.menu, route.path);
+			UI.addNav(route);
 		}
 	},
 	// Splits the URL, returns the path as an array
