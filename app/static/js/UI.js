@@ -45,6 +45,7 @@ const UI = {
 			route.template(appData, route, vars);
 			this.toggleSection(route);
 		} catch (err) {
+			console.log(err);
 			this.error();
 		}
 	},
@@ -98,8 +99,13 @@ const UI = {
 		this._.loader.element.classList.remove('hidden');
 		this.toggleSection();
 	},
-	error: function() {
-		UItools.renderIn(UItools.getLink('Oops! Something went wrong, click here to reload', '/'), this._.main.element, '', 'error', 'section');
+	error: function(errorType) {
+		let errorText = 'Oops! Something went wrong, click here to reload';
+		if (errorType === 404) {
+			errorText = 'Oops! Page not found [404]';
+		}
+		this._.loader.element.classList.add('hidden');
+		UItools.renderIn(UItools.getLink(errorText, '/'), this._.main.element, '', 'error', 'section');
 	}
 
 };

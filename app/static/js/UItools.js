@@ -84,6 +84,34 @@ const UItools = {
 		element.appendChild(linkElement);
 		return element;
 	},
+	getLabel: function(string, classes, id) {
+		var element = this.getText(string, classes, id, 'label');
+		return element;
+	},
+	getInput: function(label, type, name, fieldValue = '', placeholder = ' ', classes) {
+		if (typeof label === 'object') {
+			label.setAttribute('for', name);
+		}
+		var element = this.createElement(classes, name, 'input');
+		element.type = type;
+		element.value = fieldValue;
+		if (type !== 'submit') {
+			element.name = name;
+			element.placeholder = placeholder;
+		}
+		return this.wrap([label, element]);
+	},
+	getForm: function(name, fields, formAction = '/', submitText = 'Submit', classes, id) {
+		var form = this.createElement(classes, id, 'form');
+		form.action = formAction;
+		form.name = name;
+		fields = this.forceArray(fields);
+		fields.forEach((field) => {
+			form.appendChild(field);
+		});
+		form.appendChild(this.getInput('', 'submit', '', submitText));
+		return form;
+	},
 	///////////// RENDER /////////////
 	// Render in container
 	render: function(content, container) {

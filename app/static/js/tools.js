@@ -10,6 +10,15 @@ const tools = {
 			}
 		});
 		return returnValue;
+	},
+	catchForm: function(e) {
+		e.preventDefault();
+		const form = new FormData(e.target);
+		const formData = {};
+		form.forEach((value, key) => {
+			formData[key] = value;
+		});
+		// return formData;
 	}
 };
 

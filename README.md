@@ -186,6 +186,35 @@ General variables:
 ### Flow
 ![Flow](/flow.png)
 
+### Data
+Data structure. Empty declarations are variables.
+Urls prefixed with _ are API urls.
+
+appData {
+	apiCalls
+	git {
+		organisation
+		totalCommitsInOrganisation
+		repos [
+			name
+			totalCommitsInForks
+			forks [
+				fork {
+					owner
+					commitsByOwner
+					urls {
+						github
+						_contributors
+					}
+				}
+			]
+			urls {
+				_forks
+			}
+		]
+	}
+}
+
 ## Process
 ### Wednesday 7-2-2018
 Setup the basic structure for the app using ES6 features. Added some basic styles.
@@ -209,6 +238,7 @@ Refactored the code, seperated the routes and all their logic from the app.
 I like lists
 - [ ] Update title(description?) dynamically
 - [ ] PWA / Webworker (extra)
+- [ ] User class
 
 - [ ] Expand router (see notes 12-2)
 - [ ] Create folder structure that supports biased/unbiased files

@@ -1,7 +1,8 @@
 import settings from './settings.js';
 import UItools from './UItools.js';
 import GitAPI from './GitAPI.js';
-import debug from './debug.js';
+// import debug from './debug.js';
+import tools from './tools.js';
 
 const gitAPI = new GitAPI();
 
@@ -16,6 +17,14 @@ const _home = {
 		content.push(UItools.getText(`Github organisation explorer`, '', '', 'h1'));
 		content.push(UItools.getText(`Discover irrelevant metadata on the repositories of an organisation.`));
 		UItools.renderIn(content, route.section);
+		var fields = [];
+		fields.push(UItools.getText('Config', '', '', 'h2'));
+		fields.push(UItools.getInput(UItools.getLabel('Textlabel'), 'text', 'textField'));
+		fields.push(UItools.getInput(UItools.getLabel('Numberlabel'), 'number', 'numberField'));
+		fields.push(UItools.getInput(UItools.getLabel('Checkboxlabel'), 'checkBox', 'testCheck'));
+		const form = UItools.getForm('testForm', fields);
+		UItools.addHandler(form, tools.catchForm, 'submit');
+		UItools.renderIn(form, route.section);
 	},
 	menu: 'Home'
 };

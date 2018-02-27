@@ -84,7 +84,7 @@ const router = {
 	// 404
 	noRoute: function() {
 		// Render 404 page
-		// UI.render(appData)
+		UI.error(404);
 		debug.warn(404);
 	},
 	// Helpers
