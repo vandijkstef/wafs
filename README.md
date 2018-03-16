@@ -240,5 +240,9 @@ I like lists
 - [ ] PWA / Webworker (extra)
 - [ ] User class
 
+- [ ] Interaction diagram
+- [ ] Readme opsplitsen
+- [ ] Feedback over API
+
 - [ ] Expand router (see notes 12-2)
 - [ ] Create folder structure that supports biased/unbiased files
