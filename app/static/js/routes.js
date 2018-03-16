@@ -17,14 +17,14 @@ const _home = {
 		content.push(UItools.getText(`Github organisation explorer`, '', '', 'h1'));
 		content.push(UItools.getText(`Discover irrelevant metadata on the repositories of an organisation.`));
 		UItools.renderIn(content, route.section);
-		var fields = [];
-		fields.push(UItools.getText('Config', '', '', 'h2'));
-		fields.push(UItools.getInput(UItools.getLabel('Textlabel'), 'text', 'textField'));
-		fields.push(UItools.getInput(UItools.getLabel('Numberlabel'), 'number', 'numberField'));
-		fields.push(UItools.getInput(UItools.getLabel('Checkboxlabel'), 'checkBox', 'testCheck'));
-		const form = UItools.getForm('testForm', fields);
-		UItools.addHandler(form, tools.catchForm, 'submit');
-		UItools.renderIn(form, route.section);
+		// var fields = [];
+		// fields.push(UItools.getText('Config', '', '', 'h2'));
+		// fields.push(UItools.getInput(UItools.getLabel('Textlabel'), 'text', 'textField'));
+		// fields.push(UItools.getInput(UItools.getLabel('Numberlabel'), 'number', 'numberField'));
+		// fields.push(UItools.getInput(UItools.getLabel('Checkboxlabel'), 'checkBox', 'testCheck'));
+		// const form = UItools.getForm('testForm', fields);
+		// UItools.addHandler(form, tools.catchForm, 'submit');
+		// UItools.renderIn(form, route.section);
 	},
 	menu: 'Home'
 };
@@ -34,20 +34,20 @@ const _repos = {
 	path: '/repo',
 	handler: (appData, vars, callback) => {
 		gitAPI.GetReposFromOrg(appData, settings.organisation, function(status) {
-			if (status === false) {
-				callback(false);
-			} else {
-				let count = 0;
-				appData.git.repos.forEach((repo) => {
-					repo.countAllCommits(false, () => {
-						console.log(2, repo);
-						count++;
-						if (count == appData.git.repos.length) {
-							callback();
-						}
-					});
+			// if (status === false) {
+			// 	callback(false);
+			// } else {
+			let count = 0;
+			appData.git.repos.forEach((repo) => {
+				repo.countAllCommits(false, () => {
+					console.log(2, repo);
+					count++;
+					if (count == appData.git.repos.length) {
+						callback();
+					}
 				});
-			}
+			});
+			// }
 		});
 	},
 	template: (appData, route) => {
