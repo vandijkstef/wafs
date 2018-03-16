@@ -29,6 +29,7 @@ const UI = {
 		}
 		if (!this._.loader.element) {
 			this._.loader.element = document.querySelector('#load');
+			this._.loader.element.classList.remove('hidden');
 		}
 		this.renderNav();
 	},
@@ -109,11 +110,5 @@ const UI = {
 	}
 
 };
-
-// class UISection {
-// 	constructor(name, data) {
-		
-// 	}
-// }
 
 export default UI;
