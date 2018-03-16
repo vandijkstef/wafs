@@ -96,6 +96,7 @@ class Repo {
 						.catch((err) => {
 							console.log(err);
 							debug.warn('Repo: countAllCommits: callPromise: catch()');
+							callback();
 						});
 				});
 			});
