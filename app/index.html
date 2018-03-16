@@ -5,15 +5,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         
         <title>WAFS | Vandijkstef</title>
-        
-        <link rel="stylesheet" type="text/css" href="/static/css/styles.css" />
-        <script type="module" src="/static/js/App.web.js"></script>
+		
+		<link rel="preload" as="style" href="/static/css/styles.min.css" onload="this.rel='stylesheet'">
+		<noscript>
+        	<link rel="stylesheet" type="text/css" href="/static/css/styles.min.css" />
+		</noscript>
+
+		<script type="module" src="/static/js/App.web.js" defer></script>
     </head>
     <body>
-		<noscript>
-			<h1>Github organistaion explorer</h1>
-			<p>This website is only functional when JS is enabled.</p>
-		</noscript>
         <nav></nav>
 		<section id="load" class="hidden">
 			<div></div>
@@ -21,7 +21,14 @@
 			<div></div>
 			<div></div>
 		</section>
-		<main></main>
+		<main>
+			<section id="noscript">
+				<div>
+					<h1>Github organistaion explorer</h1>
+					<p>This website is only functional when JS is enabled and ES6 modules are supported.</p>
+				</div>
+			</section>
+		</main>
         <footer></footer>
     </body>
 </html>
