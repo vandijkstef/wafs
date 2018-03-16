@@ -2,7 +2,7 @@ import settings from './settings.js';
 import UItools from './UItools.js';
 import GitAPI from './GitAPI.js';
 // import debug from './debug.js';
-import tools from './tools.js';
+// import tools from './tools.js';
 
 const gitAPI = new GitAPI();
 
@@ -34,6 +34,7 @@ const _repos = {
 	path: '/repo',
 	handler: (appData, vars, callback) => {
 		gitAPI.GetReposFromOrg(appData, settings.organisation, function(status) {
+			console.log(status);
 			// if (status === false) {
 			// 	callback(false);
 			// } else {

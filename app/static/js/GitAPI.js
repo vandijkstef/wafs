@@ -19,7 +19,7 @@ class GitAPI extends API {
 				});
 				callback();
 			})
-			.catch((err) => {
+			.catch(() => {
 				callback(false);
 			});
 	}
