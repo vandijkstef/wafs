@@ -18,6 +18,7 @@ const UI = {
 	},
 	init: function() {
 		debug.log('UI: Init');
+		document.querySelector('#noscript').style.display = 'none';
 		if (!this._.nav.element) {
 			this._.nav.element = document.querySelector('nav');
 		}
