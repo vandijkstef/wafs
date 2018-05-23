@@ -34,20 +34,24 @@ const _repos = {
 	path: '/repo',
 	handler: (appData, vars, callback) => {
 		gitAPI.GetReposFromOrg(appData, settings.organisation, function(status) {
-			console.log(status);
+			console.log(appData);
 			// if (status === false) {
 			// 	callback(false);
 			// } else {
 			let count = 0;
-			appData.git.repos.forEach((repo) => {
-				repo.countAllCommits(false, () => {
-					console.log(2, repo);
-					count++;
-					if (count == appData.git.repos.length) {
-						callback();
-					}
+			if (appData.git.repos.length > 0) {
+				appData.git.repos.forEach((repo) => {
+					repo.countAllCommits(false, () => {
+						console.log(2, repo);
+						count++;
+						if (count == appData.git.repos.length) {
+							callback();
+						}
+					});
 				});
-			});
+			} else {
+				callback(false);
+			}
 			// }
 		});
 	},

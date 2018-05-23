@@ -102,7 +102,7 @@ const UI = {
 		this.toggleSection();
 	},
 	error: function(errorType) {
-		let errorText = 'Oops! Something went wrong, click here to reload';
+		let errorText = 'Oops! Something went wrong, click here to reload. Please try again later if the problem persists';
 		if (errorType === 404) {
 			errorText = 'Oops! Page not found [404]';
 		}
